@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AnimalShelters.Data;
 using AnimalShelters.Data.Abstract;
 using AnimalShelters.Data.Repositories;
+using AnimalShelters.API.ViewModels.Mappings;
+using AnimalShelters.API.Core;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -104,12 +106,7 @@ namespace AnimalShelters.API
                 //routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
             });
 
-            .Initialize(app.ApplicationServices);
-
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            AnimalSheltersDbInitializer.Initialize(app.ApplicationServices);
         }
     }
 }
