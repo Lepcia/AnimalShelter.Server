@@ -13,14 +13,7 @@ namespace AnimalShelters.API.ViewModels
         public string Name { get; set; }
         public int Age { get; set; }
         public string AgeAccuracy { get; set; }
-
-        private string ageString { get; set; }
-        public string AgeString
-        {
-            get { return ageString; }
-            set { ageString = "" + Age + " " + AgeAccuracy.ToString(); }
-        }
-
+        public string AgeString { get; set; }
         public string Species { get; set; }
         public string Breed { get; set; }
         public string Sex { get; set; }
