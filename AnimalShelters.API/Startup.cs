@@ -70,9 +70,6 @@ namespace AnimalShelters.API
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IFavoriteAnimalRepository, FavoriteAnimalRepository>();
 
-            //services.AddAutoMapper();
-            AutoMapperConfiguration.Configure();
-
             AutoMapperConfiguration.Configure();
 
             services.AddCors();
