@@ -46,10 +46,12 @@ namespace AnimalShelters.API.ViewModels.Mappings
                 map => map.UseValue(Enum.GetNames(typeof(AnimalSexEnum)).ToArray()))
                 .ForMember(vm => vm.Size,
                 map => map.MapFrom(s => ((AnimalSizeEnum)s.Size).ToString()))
+                .ForMember(vm => vm.Specie,
+                map => map.MapFrom(s => ((AnimalSpeciesEnum)s.Species).ToString()))
                 .ForMember(vm => vm.Sizes,
                 map => map.UseValue(Enum.GetNames(typeof(AnimalSizeEnum)).ToArray()));
 
             CreateMap<Photo, PhotoViewModel>();
-        }
+         }
     }
 }

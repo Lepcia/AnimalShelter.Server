@@ -7,7 +7,7 @@ namespace AnimalShelters.Model.Entities
     public class User : IEntityBase
     {
         public User() {
-            FavoriteAnimals = new List<Animal>();
+            FavoriteAnimals = new List<FavoriteAnimal>();
         }
 
         public int Id { get; set; }
@@ -16,6 +16,6 @@ namespace AnimalShelters.Model.Entities
         public DateTime DateOfBirth { get; set; }
         public string Email { get; set; }
         public string Avatar { get; set; }
-        public ICollection<Animal> FavoriteAnimals { get; set; }
+        public ICollection<FavoriteAnimal> FavoriteAnimals { get; set; }
     }
 }

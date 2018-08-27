@@ -21,7 +21,7 @@ namespace AnimalShelters.Model.Entities
             set { ageString = "" + Age + " " + AgeAccuracy.ToString(); }
         }
 
-        public string Species { get; set; }
+        public AnimalSpeciesEnum Species { get; set; }
         public string Breed { get; set; }
         public AnimalSexEnum Sex { get; set; }
         public AnimalSizeEnum Size { get; set; }

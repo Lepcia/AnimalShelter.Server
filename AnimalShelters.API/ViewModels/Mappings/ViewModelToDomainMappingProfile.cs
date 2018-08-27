@@ -12,7 +12,7 @@ namespace AnimalShelters.API.ViewModels.Mappings
         public ViewModelToDomainMappingProfile()
         {
             CreateMap<UserViewModel, User>()
-                .ForMember(a => a.FavoriteAnimals, map => map.UseValue(new List<Animal>()));
+                .ForMember(a => a.FavoriteAnimals, map => map.UseValue(new List<FavoriteAnimal>()));
 
             CreateMap<AnimalShelterViewModel, AnimalShelter>()
                 .ForMember(a => a.Animals, map => map.UseValue(new List<Animal>()));

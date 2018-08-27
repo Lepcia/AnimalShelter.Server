@@ -182,9 +182,9 @@ namespace AnimalShelters.API.Controllers
 
             if (User != null)
             {
-                Animal _newFavoriteAnimal = Mapper.Map<AnimalViewModel, Animal>(animal);
-                _user.FavoriteAnimals.Add(_newFavoriteAnimal);
-                _userRepository.Commit();
+                //Animal _newFavoriteAnimal = Mapper.Map<AnimalViewModel, Animal>(animal);
+                //_user.FavoriteAnimals.Add(_newFavoriteAnimal);
+                //_userRepository.Commit();
             }
             else
             {

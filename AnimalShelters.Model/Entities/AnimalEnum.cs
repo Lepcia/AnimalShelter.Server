@@ -24,4 +24,11 @@ namespace AnimalShelters.Model.Entities
         Months = 3,
         Years = 4
     }
+
+    public enum AnimalSpeciesEnum
+    {
+        Dog = 1,
+        Cat = 2,
+        Rabbit = 3
+    }
 }
