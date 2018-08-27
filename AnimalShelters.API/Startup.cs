@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 using AnimalShelters.Data;
 using AnimalShelters.Data.Abstract;
 using AnimalShelters.Data.Repositories;
-using AnimalShelters.API.ViewModels.Mappings;
 using AnimalShelters.API.Core;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using AnimalShelters.API.ViewModels.Mappings;
 
 namespace AnimalShelters.API
 {
@@ -26,6 +22,7 @@ namespace AnimalShelters.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         private static string _applicationPath = string.Empty;
         private static string _contentRootPath = string.Empty;
+        bool useInMemoryProvider = false;
         public IConfigurationRoot Configuration { get; set; }
 
         public Startup(IHostingEnvironment env)
@@ -49,10 +46,23 @@ namespace AnimalShelters.API
         public void ConfigureServices(IServiceCollection services)
         {
             string sqlConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            try
+            {
+                useInMemoryProvider = bool.Parse(Configuration["AppSettings:InMemoryProvider"]);
+            }
+            catch { }
 
-            services.AddDbContext<AnimalShelterContext>(options =>
-            options.UseSqlServer(Configuration["Data:AnimalSheltersConnection:ConnectionString"],
-            b => b.MigrationsAssembly("AnimalShelters.API")));
+            services.AddDbContext<AnimalShelterContext>(options => {
+                switch (useInMemoryProvider)
+                {
+                    case true:
+                        options.UseInMemoryDatabase();
+                        break;
+                    default:
+                        options.UseSqlServer(sqlConnectionString,
+                            b => b.MigrationsAssembly("AnimalShelters.API"));
+                        break;
+                }});
 
             services.AddScoped<IAnimalRepository, AnimalRepository>();
             services.AddScoped<IAnimalShelterRepository, AnimalShelterRepository>();
@@ -63,12 +73,15 @@ namespace AnimalShelters.API
             //services.AddAutoMapper();
             AutoMapperConfiguration.Configure();
 
+            AutoMapperConfiguration.Configure();
+
+            services.AddCors();
+
             services.AddMvc()
                 .AddJsonOptions(opts =>
                 {
                     opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
-            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
