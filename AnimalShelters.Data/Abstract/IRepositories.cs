@@ -12,4 +12,6 @@ namespace AnimalShelters.Data.Abstract
     public interface IUserRepository : IEntityBaseRepository<User> { }
 
     public interface IPhotoRepository : IEntityBaseRepository<Photo> { }
+
+    public interface IFavoriteAnimalRepository : IEntityBaseRepository<FavoriteAnimal> { }
 }

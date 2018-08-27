@@ -13,6 +13,7 @@ namespace AnimalShelters.Data
         public DbSet<AnimalShelter> AnimalShelters { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<FavoriteAnimal> FavoriteAnimals { get; set; }
 
         public AnimalShelterContext(DbContextOptions options) : base(options) { }
 
@@ -84,6 +85,9 @@ namespace AnimalShelters.Data
                 .Property(u => u.LastName)
                 .HasMaxLength(100)
                 .IsRequired();
+
+            modelBuilder.Entity<FavoriteAnimal>()
+                .ToTable("FavoriteAnimal");
 
         }
 

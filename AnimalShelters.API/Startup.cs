@@ -38,10 +38,10 @@ namespace AnimalShelters.API
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            if (env.IsDevelopment())
-            {
-                builder.AddUserSecrets<Startup>();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    builder.AddUserSecrets<Startup>();
+            //}
 
             Configuration = builder.Build();
         }
@@ -58,8 +58,11 @@ namespace AnimalShelters.API
             services.AddScoped<IAnimalShelterRepository, AnimalShelterRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
+            services.AddScoped<IFavoriteAnimalRepository, FavoriteAnimalRepository>();
 
-            services.AddAutoMapper();
+            //services.AddAutoMapper();
+            AutoMapperConfiguration.Configure();
+
             services.AddMvc()
                 .AddJsonOptions(opts =>
                 {
