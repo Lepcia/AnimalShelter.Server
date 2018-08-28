@@ -9,6 +9,7 @@ namespace AnimalShelters.Model.Entities
         public Photo() { }
 
         public int Id { get; set; }
+        public int AnimalId { get; set; }
         public string Content { get; set; }
     }
 }

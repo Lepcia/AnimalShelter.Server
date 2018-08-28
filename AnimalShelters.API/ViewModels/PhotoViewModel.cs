@@ -8,6 +8,7 @@ namespace AnimalShelters.API.ViewModels
     public class PhotoViewModel
     {
         public int Id { get; set; }
+        public int AnimalId { get; set; }
         public string Content { get; set; }
     }
 }
