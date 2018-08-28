@@ -86,7 +86,7 @@ namespace AnimalShelters.API.Controllers
 
                 foreach (var animal in _user.FavoriteAnimals)
                 {
-                    Animal _animalDb = _animalRepository.GetSingle(animal.Id);
+                    Animal _animalDb = _animalRepository.GetSingle(animal.AnimalId);
                     _userViewModel.FavoriteAnimals.Add(Mapper.Map<Animal, AnimalViewModel>(_animalDb));
                 }
 
@@ -109,7 +109,7 @@ namespace AnimalShelters.API.Controllers
 
                 foreach (var animal in _user.FavoriteAnimals)
                 {
-                    Animal _animalDb = _animalRepository.GetSingle(animal.Id);
+                    Animal _animalDb = _animalRepository.GetSingle(animal.AnimalId);
                     _animalViewModel.Add(Mapper.Map<Animal, AnimalViewModel>(_animalDb));
                 }
 
@@ -171,7 +171,7 @@ namespace AnimalShelters.API.Controllers
         }
 
         [HttpPut("{id}/addFavoriteAnimal")]
-        public IActionResult AddFavoriteAnimal(int id, [FromBody]AnimalViewModel animal)
+        public IActionResult AddFavoriteAnimal(int id, [FromBody]int animalId)
         {
             if (!ModelState.IsValid)
             {
@@ -179,19 +179,27 @@ namespace AnimalShelters.API.Controllers
             }
 
             User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals);
+            Animal _animal = _animalRepository.GetSingle(a => a.Id == animalId);
 
-            if (User != null)
+            if (_user != null && _animal != null)
             {
-                //Animal _newFavoriteAnimal = Mapper.Map<AnimalViewModel, Animal>(animal);
-                //_user.FavoriteAnimals.Add(_newFavoriteAnimal);
-                //_userRepository.Commit();
+                if (_user.FavoriteAnimals.Where(fa => fa.AnimalId == animalId).Count() == 0)
+                {
+                    _user.FavoriteAnimals.Add(new FavoriteAnimal { UserId = _user.Id, AnimalId = _animal.Id });
+                    _userRepository.Commit();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Animal already in favorites!");
+                    return BadRequest(ModelState);
+                }
             }
             else
             {
                 return NotFound();
             }
 
-            return new NoContentResult();            
+            return new NoContentResult();
         }
 
         [HttpDelete("{id}")]
@@ -207,13 +215,32 @@ namespace AnimalShelters.API.Controllers
             {
                 IEnumerable<FavoriteAnimal> _favoriteAnimals = _favoriteAnimalRepository.FindBy(fa => fa.UserId == id);
 
-                foreach(var animal in _favoriteAnimals)
+                foreach (var animal in _favoriteAnimals)
                 {
                     _favoriteAnimalRepository.Delete(animal);
                 }
 
                 _userRepository.Delete(_user);
                 _userRepository.Commit();
+
+                return new NoContentResult();
+            }
+        }
+
+        [HttpDelete("{idUser}/{idAnimal}")]
+        public IActionResult DeleteFavoriteAnimal(int idUser, int idAnimal)
+        {
+            User _user = _userRepository.GetSingle(idUser);
+            FavoriteAnimal _favoriteAnimal = _favoriteAnimalRepository.GetSingle(fa => fa.AnimalId == idAnimal && fa.UserId == idUser);
+
+            if (_user == null || _favoriteAnimal == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _favoriteAnimalRepository.Delete(_favoriteAnimal);
+                _favoriteAnimalRepository.Commit();
 
                 return new NoContentResult();
             }

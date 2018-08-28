@@ -21,6 +21,7 @@ namespace AnimalShelters.API.ViewModels.Mappings
 
             CreateMap<AnimalViewModel, Animal>()
                 .ForMember(a => a.Photos, map => map.UseValue(new List<Photo>()));
+
         }
     }
 }
