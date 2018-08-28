@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace AnimalShelters.API.Controllers
 {
+    [Route("api/[controller]")]
     public class AnimalsController : Controller
     {
         IAnimalRepository _animalRepository;
