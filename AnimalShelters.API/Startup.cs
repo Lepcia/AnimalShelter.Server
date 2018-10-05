@@ -89,7 +89,8 @@ namespace AnimalShelters.API
             app.UseCors(builder =>
                 builder.AllowAnyOrigin()
                 .AllowAnyHeader()
-                .AllowAnyMethod());
+                .AllowAnyMethod()
+                .AllowCredentials());
 
             app.UseExceptionHandler(
               builder =>

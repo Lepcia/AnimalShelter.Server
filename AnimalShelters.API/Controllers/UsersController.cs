@@ -29,6 +29,7 @@ namespace AnimalShelters.API.Controllers
             _favoriteAnimalRepository = favoriteAnimalRepository;
         }
 
+        [HttpGet]
         public IActionResult Get()
         {
             var pagination = Request.Headers["Pagination"];
