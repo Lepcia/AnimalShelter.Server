@@ -69,6 +69,9 @@ namespace AnimalShelters.API
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IFavoriteAnimalRepository, FavoriteAnimalRepository>();
+            services.AddScoped<IRightsRepository, RightsRepository>();
+            services.AddScoped<IRightsToUserRepository, RightsToUserRepository>();
+            services.AddScoped<IModuleRepository, ModuleRepository>();
 
             AutoMapperConfiguration.Configure();
 

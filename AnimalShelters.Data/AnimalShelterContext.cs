@@ -14,6 +14,9 @@ namespace AnimalShelters.Data
         public DbSet<Photo> Photos { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<FavoriteAnimal> FavoriteAnimals { get; set; }
+        public DbSet<Module> Modules { get; set; }
+        public DbSet<Rights> Rights { get; set; }
+        public DbSet<RightsToUser> RightsToUsers { get; set; }
 
         public AnimalShelterContext(DbContextOptions options) : base(options) { }
 
@@ -88,6 +91,47 @@ namespace AnimalShelters.Data
 
             modelBuilder.Entity<FavoriteAnimal>()
                 .ToTable("FavoriteAnimal");
+
+            modelBuilder.Entity<Module>()
+                .ToTable("Module");
+
+            modelBuilder.Entity<Module>()
+                .Property(m => m.Name)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            modelBuilder.Entity<Module>()
+                .Property(m => m.Symbol)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            modelBuilder.Entity<Module>()
+                .Property(m => m.Order)
+                .IsRequired();
+            
+            modelBuilder.Entity<Rights>()
+                .Property(r => r.Name)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            modelBuilder.Entity<Rights>()
+                .Property(r => r.Symbol)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            modelBuilder.Entity<RightsToUser>()
+                .Property(r => r.IdRight)
+                .IsRequired();
+
+            modelBuilder.Entity<RightsToUser>()
+                .Property(r => r.IdUser)
+                .IsRequired();
+
+            modelBuilder.Entity<Rights>()
+                .ToTable("Rights");
+
+            modelBuilder.Entity<RightsToUser>()
+                .ToTable("RightsToUser");
 
         }
 
