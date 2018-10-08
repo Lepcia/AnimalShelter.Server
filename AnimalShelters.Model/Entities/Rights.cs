@@ -4,12 +4,12 @@ using System.Text;
 
 namespace AnimalShelters.Model.Entities
 {
-    public class Photo: IEntityBase
+    public class Rights : IEntityBase
     {
-        public Photo() { }
+        public Rights() { }
 
         public int Id { get; set; }
-        public int AnimalId { get; set; }
-        public string Content { get; set; }
+        public string Symbol { get; set; }
+        public string Name { get; set; }
     }
 }

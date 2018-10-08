@@ -93,6 +93,16 @@ namespace AnimalShelters.Data
 
                 context.SaveChanges();
             }
+            if (!context.Modules.Any())
+            {
+                Module module_01 = new Module { Symbol = "ADMIN", Name = "Administration" };
+                Module module_02 = new Module { Symbol = "FAVORITES", Name = "Favorites animals" };
+            }
+            if (!context.Rights.Any())
+            {
+                Rights right_01 = new Rights { Symbol = "ADMIN", Name = "Administration" };
+                Rights right_02 = new Rights { Symbol = "ADD_FAVORITE", Name = "Add favorite animals" };
+            }
         }
     }
 }
