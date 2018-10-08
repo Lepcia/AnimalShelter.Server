@@ -11,5 +11,6 @@ namespace AnimalShelters.Model.Entities
         public int Id { get; set; }
         public string Symbol { get; set; }
         public string Name { get; set; }
+        public int IdModule { get; set; }
     }
 }

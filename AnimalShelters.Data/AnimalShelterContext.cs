@@ -119,6 +119,10 @@ namespace AnimalShelters.Data
                 .HasMaxLength(100)
                 .IsRequired();
 
+            modelBuilder.Entity<Rights>()
+                .Property(r => r.IdModule)
+                .IsRequired();
+
             modelBuilder.Entity<RightsToUser>()
                 .Property(r => r.IdRight)
                 .IsRequired();

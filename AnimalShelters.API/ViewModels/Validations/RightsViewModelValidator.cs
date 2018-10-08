@@ -12,6 +12,7 @@ namespace AnimalShelters.API.ViewModels.Validations
         {
             RuleFor(right => right.Symbol).NotEmpty().WithMessage("Symbol cannot be empty!");
             RuleFor(right => right.Name).NotEmpty().WithMessage("Name cannot be empty!");
+            RuleFor(right => right.IdModule).NotEmpty().WithMessage("Id module cannot be empty!");
         }
     }
 }

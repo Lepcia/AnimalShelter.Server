@@ -97,11 +97,17 @@ namespace AnimalShelters.Data
             {
                 Module module_01 = new Module { Symbol = "ADMIN", Name = "Administration" };
                 Module module_02 = new Module { Symbol = "FAVORITES", Name = "Favorites animals" };
+                Module module_03 = new Module { Symbol = "SHELTERS", Name = "Animal shelters" };
+                Module module_04 = new Module { Symbol = "ANIMALS", Name = "Animals" };
             }
             if (!context.Rights.Any())
             {
-                Rights right_01 = new Rights { Symbol = "ADMIN", Name = "Administration" };
-                Rights right_02 = new Rights { Symbol = "ADD_FAVORITE", Name = "Add favorite animals" };
+                Rights right_01 = new Rights { Symbol = "DEFAULT", Name = "Administration", IdModule = 1 };
+                Rights right_02 = new Rights { Symbol = "EDIT_USER", Name = "Edit user", IdModule = 1 };
+                Rights right_03 = new Rights { Symbol = "ADD USER", Name = "Add user", IdModule = 1 };
+                Rights right_04 = new Rights { Symbol = "USER_LIST", Name = "User list view", IdModule = 1 };
+                Rights right_05 = new Rights { Symbol = "ADD_FAVORITE", Name = "Add favorite animal", IdModule = 2 };
+                Rights rights_06 = new Rights { Symbol = "DELETE_FAVORITE", Name = "Delete favorite animal", IdModule = 2 };
             }
         }
     }

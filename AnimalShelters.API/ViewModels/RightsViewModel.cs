@@ -12,6 +12,7 @@ namespace AnimalShelters.API.ViewModels
         public int Id { get; set; }
         public string Symbol { get; set; }
         public string Name { get; set; }
+        public int IdModule { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
