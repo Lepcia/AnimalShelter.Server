@@ -93,9 +93,6 @@ namespace AnimalShelters.Data
                 .ToTable("FavoriteAnimal");
 
             modelBuilder.Entity<Module>()
-                .ToTable("Module");
-
-            modelBuilder.Entity<Module>()
                 .Property(m => m.Name)
                 .HasMaxLength(100)
                 .IsRequired();
@@ -131,12 +128,30 @@ namespace AnimalShelters.Data
                 .Property(r => r.IdUser)
                 .IsRequired();
 
+
+            modelBuilder.Entity<RightsToUser>()
+                .HasOne(r => r.Right)
+                .WithMany(r => r.RightsToUser)
+                .HasForeignKey(r => r.IdRight);
+
+            modelBuilder.Entity<RightsToUser>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.RightsToUser)
+                .HasForeignKey(u => u.IdUser);
+
+            modelBuilder.Entity<Rights>()
+                .HasOne(r => r.Module)
+                .WithMany(m => m.Rights)
+                .HasForeignKey(m => m.IdModule);
+
             modelBuilder.Entity<Rights>()
                 .ToTable("Rights");
 
             modelBuilder.Entity<RightsToUser>()
                 .ToTable("RightsToUser");
 
+            modelBuilder.Entity<Module>()
+                .ToTable("Module");
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using AnimalShelters.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -10,6 +11,7 @@ namespace AnimalShelters.Data
     {
         IEnumerable<T> AllIncluding(params Expression<Func<T, object>>[] includeProperties);
         IEnumerable<T> GetAll();
+        DbSet<T> GetContext();
         int Count();
         T GetSingle(int id);
         T GetSingle(Expression<Func<T, bool>> predicate);

@@ -99,6 +99,13 @@ namespace AnimalShelters.Data
                 Module module_02 = new Module { Symbol = "FAVORITES", Name = "Favorites animals" };
                 Module module_03 = new Module { Symbol = "SHELTERS", Name = "Animal shelters" };
                 Module module_04 = new Module { Symbol = "ANIMALS", Name = "Animals" };
+
+                context.Modules.Add(module_01);
+                context.Modules.Add(module_02);
+                context.Modules.Add(module_03);
+                context.Modules.Add(module_04);
+
+                context.SaveChanges();
             }
             if (!context.Rights.Any())
             {
@@ -107,7 +114,42 @@ namespace AnimalShelters.Data
                 Rights right_03 = new Rights { Symbol = "ADD USER", Name = "Add user", IdModule = 1 };
                 Rights right_04 = new Rights { Symbol = "USER_LIST", Name = "User list view", IdModule = 1 };
                 Rights right_05 = new Rights { Symbol = "ADD_FAVORITE", Name = "Add favorite animal", IdModule = 2 };
-                Rights rights_06 = new Rights { Symbol = "DELETE_FAVORITE", Name = "Delete favorite animal", IdModule = 2 };
+                Rights right_06 = new Rights { Symbol = "DELETE_FAVORITE", Name = "Delete favorite animal", IdModule = 2 };
+
+                context.Rights.Add(right_01);
+                context.Rights.Add(right_02);
+                context.Rights.Add(right_03);
+                context.Rights.Add(right_04);
+                context.Rights.Add(right_05);
+                context.Rights.Add(right_06);
+
+                context.SaveChanges();
+            }
+            if (!context.RightsToUsers.Any())
+            {
+                RightsToUser rightToUser_01 = new RightsToUser { IdRight = 1, IdUser = 1 };
+                RightsToUser rightToUser_02 = new RightsToUser { IdRight = 2, IdUser = 1 };
+                RightsToUser rightToUser_03 = new RightsToUser { IdRight = 3, IdUser = 1 };
+                RightsToUser rightToUser_04 = new RightsToUser { IdRight = 4, IdUser = 1 };
+                RightsToUser rightToUser_05 = new RightsToUser { IdRight = 5, IdUser = 1 };
+                RightsToUser rightToUser_06 = new RightsToUser { IdRight = 5, IdUser = 2 };
+                RightsToUser rightToUser_07 = new RightsToUser { IdRight = 6, IdUser = 2 };
+                RightsToUser rightToUser_08 = new RightsToUser { IdRight = 5, IdUser = 3 };
+                RightsToUser rightToUser_09 = new RightsToUser { IdRight = 6, IdUser = 3 };
+                RightsToUser rightToUser_10 = new RightsToUser { IdRight = 4, IdUser = 3 };
+
+                context.RightsToUsers.Add(rightToUser_01);
+                context.RightsToUsers.Add(rightToUser_02);
+                context.RightsToUsers.Add(rightToUser_03);
+                context.RightsToUsers.Add(rightToUser_04);
+                context.RightsToUsers.Add(rightToUser_05);
+                context.RightsToUsers.Add(rightToUser_06);
+                context.RightsToUsers.Add(rightToUser_07);
+                context.RightsToUsers.Add(rightToUser_08);
+                context.RightsToUsers.Add(rightToUser_09);
+                context.RightsToUsers.Add(rightToUser_10);
+
+                context.SaveChanges();
             }
         }
     }

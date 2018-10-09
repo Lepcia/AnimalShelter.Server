@@ -13,10 +13,15 @@ namespace AnimalShelters.Data.Repositories
         where T : class, IEntityBase, new () 
     {
         private AnimalShelterContext _context;
-
+        
         public EntityBaseRepository(AnimalShelterContext context)
         {
             _context = context;
+        }
+
+        public virtual DbSet<T> GetContext()
+        {
+            return _context.Set<T>();
         }
 
         public virtual IEnumerable<T> GetAll()

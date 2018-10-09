@@ -57,6 +57,20 @@ namespace AnimalShelters.API.Controllers
             return new OkObjectResult(_rightsViewModel);
         }
 
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+            IEnumerable<Rights> _rights = _rightsRepository
+                .GetAll()
+                .OrderBy(u => u.Id)
+                .ToList();
+
+            IEnumerable<RightsViewModel> _rightsViewModel = Mapper.Map<IEnumerable<Rights>, IEnumerable<RightsViewModel>>(_rights);
+
+            return new OkObjectResult(_rightsViewModel);
+        }
+
+
         [HttpGet("{id}", Name = "GetRight")]
         public IActionResult Get(int id)
         {
@@ -122,9 +136,7 @@ namespace AnimalShelters.API.Controllers
 
             right = Mapper.Map<Rights, RightsViewModel>(_newRight);
 
-            CreatedAtRouteResult result = CreatedAtRoute("GetRight", new { controller = "Rights", id = right.Id }, right);
-
-            return result;
+            return new OkObjectResult(right);
         }
 
         [HttpPut]
@@ -178,7 +190,6 @@ namespace AnimalShelters.API.Controllers
 
                 return new NoContentResult();
             }
-        }
-
+        }        
     }
 }

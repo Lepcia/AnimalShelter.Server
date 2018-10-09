@@ -55,6 +55,19 @@ namespace AnimalShelters.API.Controllers
             return new OkObjectResult(_moduleRepository);
         }
 
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+            IEnumerable<Module> _modules = _moduleRepository
+                .GetAll()
+                .OrderBy(m => m.Order)
+                .ToList();
+
+            IEnumerable<ModuleViewModel> _moduleViewModel = Mapper.Map<IEnumerable<Module>, IEnumerable<ModuleViewModel>>(_modules);
+
+            return new OkObjectResult(_moduleViewModel);
+        }
+
         [HttpGet("{id}", Name = "GetModule")]
         public IActionResult Get(int id)
         {
