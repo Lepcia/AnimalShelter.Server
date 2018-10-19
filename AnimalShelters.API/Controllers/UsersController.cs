@@ -221,6 +221,8 @@ namespace AnimalShelters.API.Controllers
                     _favoriteAnimalRepository.Delete(animal);
                 }
 
+                _favoriteAnimalRepository.Commit();
+
                 _userRepository.Delete(_user);
                 _userRepository.Commit();
 

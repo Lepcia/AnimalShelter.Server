@@ -13,6 +13,7 @@ namespace AnimalShelters.Model.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public int Age { get; set; }
+        public int IdShelter { get; set; }
         public AnimalAgeAccuracyEnum AgeAccuracy { get; set; }
 
         private string ageString { get; set; }
