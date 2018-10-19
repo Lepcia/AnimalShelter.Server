@@ -23,6 +23,7 @@ namespace AnimalShelters.Data
                 Animal animal_01 = new Animal
                 {
                     Name = "Burek",
+                    IdShelter = 1,
                     Age = 2,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Years,
                     Breed = "Owczarek",
@@ -34,6 +35,7 @@ namespace AnimalShelters.Data
                 Animal animal_02 = new Animal
                 {
                     Name = "Jolka",
+                    IdShelter = 2,
                     Age = 7,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Months,
                     Breed = "Rogdoll",
@@ -101,8 +103,24 @@ namespace AnimalShelters.Data
             }
             if (!context.AnimalShelters.Any())
             {
-                AnimalShelter animalShelter_01 = new AnimalShelter { Name = "Schronisko", City = "Gdańsk", Street = "Szeroka", Number = "22", PostalCode = "80-234", Email="schronisko@wp.pl", Phone="324 324 123" };
-                AnimalShelter animalShelter_02 = new AnimalShelter { Name = "Ciapkowo", City = "Gdańsk", Street = "Długa", Number = "12", PostalCode = "80-556", Email = "ciapkowo@wp.pl", Phone = "565 324 123" };
+                AnimalShelter animalShelter_01 = new AnimalShelter {
+                    Name = "Schronisko",
+                    City = "Gdańsk",
+                    Street = "Szeroka",
+                    Number = "22",
+                    PostalCode = "80-234",
+                    Email ="schronisko@wp.pl",
+                    Phone ="324 324 123"
+                };
+                AnimalShelter animalShelter_02 = new AnimalShelter {
+                    Name = "Ciapkowo",
+                    City = "Gdańsk",
+                    Street = "Długa",
+                    Number = "12",
+                    PostalCode = "80-556",
+                    Email = "ciapkowo@wp.pl",
+                    Phone = "565 324 123"
+                };
 
                 context.AnimalShelters.Add(animalShelter_01);
                 context.AnimalShelters.Add(animalShelter_02);
