@@ -67,7 +67,16 @@ namespace AnimalShelters.API.Controllers
                 .OrderBy(a => a.Id)
                 .ToList();
 
-            IEnumerable<AnimalViewModel> _animalViewModel = Mapper.Map<IEnumerable<Animal>, IEnumerable<AnimalViewModel>>(_animals);
+            IList<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();
+
+            foreach (var animal in _animals)
+            {
+
+                AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(s => s.Id == animal.AnimalsToAnimalShelter.AnimalShelterId);
+                AnimalDetailsViewModel _animalDetailsViewModel = Mapper.Map<Animal, AnimalDetailsViewModel>(animal);
+                _animalDetailsViewModel.AnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
+                _animalViewModel.Add(_animalDetailsViewModel);
+            }
 
             return new OkObjectResult(_animalViewModel);
         }
