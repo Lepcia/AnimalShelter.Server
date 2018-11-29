@@ -148,16 +148,18 @@ namespace AnimalShelters.Data
             if (!context.Modules.Any())
             {
                 Module module_01 = new Module { Id = 1, Symbol = "ADMIN", Name = "Administration", Icon = "ic_https_black_18dp", Order = 1 };
-                Module module_02 = new Module { Id = 2, Symbol = "FAVORITE", Name = "Favorite animals", Icon = "ic_favorite_black_18dp", Order = 3 };
-                Module module_03 = new Module { Id = 3, Symbol = "SHELTERS", Name = "Animal shelters", Icon = "ic_assignment_black_18dp", Order = 5 };
-                Module module_04 = new Module { Id = 4, Symbol = "ANIMALS", Name = "Animals", Icon = "ic_pets_black_18dp", Order = 4 };
-                Module module_05 = new Module { Id = 5, Symbol = "SEARCH", Name = "Search", Icon = "baseline_search_black_18dp", Order = 2 };
+                Module module_02 = new Module { Id = 2, Symbol = "FAVORITE", Name = "Favorite animals", Icon = "ic_favorite_black_18dp", Order = 4 };
+                Module module_03 = new Module { Id = 3, Symbol = "SHELTERS", Name = "Animal shelters", Icon = "ic_assignment_black_18dp", Order = 6 };
+                Module module_04 = new Module { Id = 4, Symbol = "ANIMALS", Name = "Animals", Icon = "ic_pets_black_18dp", Order = 5 };
+                Module module_05 = new Module { Id = 5, Symbol = "SEARCH", Name = "Search", Icon = "baseline_search_black_18dp", Order = 3 };
+                Module module_06 = new Module { Id = 6, Symbol = "NEWS", Name = "News board", Icon = "ic_list_black_18dp", Order = 2 };
 
                 context.Modules.Add(module_01);
                 context.Modules.Add(module_02);
                 context.Modules.Add(module_03);
                 context.Modules.Add(module_04);
                 context.Modules.Add(module_05);
+                context.Modules.Add(module_06);
 
                 context.SaveChanges();
             }
@@ -172,6 +174,7 @@ namespace AnimalShelters.Data
                 Rights right_07 = new Rights { Symbol = "DEFAULT", Name = "Search", IdModule = 5 };
                 Rights right_08 = new Rights { Symbol = "ADD_ANIMAL", Name = "Add animal", IdModule = 4 };
                 Rights right_09 = new Rights { Symbol = "ADD_SHELTER", Name = "Add shelter", IdModule = 3 };
+                Rights right_10 = new Rights { Symbol = "DEFAULT", Name = "News board", IdModule = 6 };
 
                 context.Rights.Add(right_01);
                 context.Rights.Add(right_02);
@@ -182,6 +185,7 @@ namespace AnimalShelters.Data
                 context.Rights.Add(right_07);
                 context.Rights.Add(right_08);
                 context.Rights.Add(right_09);
+                context.Rights.Add(right_10);
 
                 context.SaveChanges();
             }
@@ -206,6 +210,10 @@ namespace AnimalShelters.Data
                 RightsToUser rightToUser_17 = new RightsToUser { IdRight = 7, IdUser = 1 };
                 RightsToUser rightToUser_18 = new RightsToUser { IdRight = 8, IdUser = 1 };
                 RightsToUser rightToUser_19 = new RightsToUser { IdRight = 9, IdUser = 1 };
+                RightsToUser rightToUser_20 = new RightsToUser { IdRight = 10, IdUser = 1 };
+                RightsToUser rightToUser_21 = new RightsToUser { IdRight = 10, IdUser = 2 };
+                RightsToUser rightToUser_22 = new RightsToUser { IdRight = 10, IdUser = 3 };
+                RightsToUser rightToUser_23 = new RightsToUser { IdRight = 10, IdUser = 4 };
 
                 context.RightsToUsers.Add(rightToUser_01);
                 context.RightsToUsers.Add(rightToUser_02);
@@ -226,6 +234,10 @@ namespace AnimalShelters.Data
                 context.RightsToUsers.Add(rightToUser_17);
                 context.RightsToUsers.Add(rightToUser_18);
                 context.RightsToUsers.Add(rightToUser_19);
+                context.RightsToUsers.Add(rightToUser_20);
+                context.RightsToUsers.Add(rightToUser_21);
+                context.RightsToUsers.Add(rightToUser_22);
+                context.RightsToUsers.Add(rightToUser_23);
 
                 context.SaveChanges();
             }

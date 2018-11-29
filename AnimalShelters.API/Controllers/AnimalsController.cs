@@ -121,7 +121,7 @@ namespace AnimalShelters.API.Controllers
         public IActionResult Get([FromBody]AnimalSearchViewModel animalsSearch)
         {
             AnimalSexEnum sex = (AnimalSexEnum)Enum.Parse(typeof(AnimalSexEnum), animalsSearch.Sex);
-            AnimalSpeciesEnum species = (AnimalSpeciesEnum)Enum.Parse(typeof(AnimalSpeciesEnum), animalsSearch.Specie);
+            AnimalSpeciesEnum species = (AnimalSpeciesEnum)Enum.Parse(typeof(AnimalSpeciesEnum), animalsSearch.Species);
             IEnumerable<Animal> _animals = _animalRepository.FindBy(a =>
             a.Name == (animalsSearch.Name.Length > 0 ? animalsSearch.Name : a.Name) &&
             a.Breed == (animalsSearch.Breed.Length > 0 ? animalsSearch.Breed : a.Breed) &&
@@ -137,11 +137,20 @@ namespace AnimalShelters.API.Controllers
         public IActionResult GetNewestAnimals()
         {
             IEnumerable<Animal> _animals = _animalRepository
-                .AllIncluding(a => a.AnimalsToAnimalShelter)
-                .OrderByDescending(a => a.InShelterFrom)
-                .ToList();
+                   .AllIncluding(a => a.AnimalsToAnimalShelter)
+                   .OrderByDescending(a => a.InShelterFrom)
+                   .ToList();
 
-            IEnumerable<AnimalViewModel> _animalViewModel = Mapper.Map<IEnumerable<Animal>, IEnumerable<AnimalViewModel>>(_animals);
+            IList<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();
+
+            foreach (var animal in _animals)
+            {
+
+                AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(s => s.Id == animal.AnimalsToAnimalShelter.AnimalShelterId);
+                AnimalDetailsViewModel _animalDetailsViewModel = Mapper.Map<Animal, AnimalDetailsViewModel>(animal);
+                _animalDetailsViewModel.AnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
+                _animalViewModel.Add(_animalDetailsViewModel);
+            }
 
             return new OkObjectResult(_animalViewModel);
         }

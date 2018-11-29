@@ -111,12 +111,15 @@ namespace AnimalShelters.API.Controllers
 
             if (_user != null)
             {
-                List<AnimalViewModel> _animalViewModel = new List<AnimalViewModel>();
+                List<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();
 
                 foreach (var animal in _user.FavoriteAnimals)
                 {
-                    Animal _animalDb = _animalRepository.GetSingle(animal.AnimalId);
-                    _animalViewModel.Add(Mapper.Map<Animal, AnimalViewModel>(_animalDb));
+                    Animal _animalDb = _animalRepository.GetSingle(a => a.Id == animal.AnimalId, a => a.AnimalsToAnimalShelter);
+                    AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(s => s.Id == _animalDb.AnimalsToAnimalShelter.AnimalShelterId);
+                    AnimalDetailsViewModel _animalDetailsViewModel = Mapper.Map<Animal, AnimalDetailsViewModel>(_animalDb);
+                    _animalDetailsViewModel.AnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
+                    _animalViewModel.Add(_animalDetailsViewModel);
                 }
 
                 return new OkObjectResult(_animalViewModel);
@@ -126,7 +129,7 @@ namespace AnimalShelters.API.Controllers
                 return NotFound();
             }
         }
-
+        
         [HttpPost]
         public IActionResult Create([FromBody]UserViewModel user)
         {
