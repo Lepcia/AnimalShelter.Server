@@ -16,14 +16,17 @@ namespace AnimalShelters.API.Controllers
     {
         IAnimalRepository _animalRepository;
         IPhotoRepository _photoRepository;
+        IAnimalShelterRepository _animalShelterRepository;
 
         int page = 1;
         int pageSize = 10;
 
-        public AnimalsController(IAnimalRepository animalRepository, IPhotoRepository photoRepository)
+        public AnimalsController(IAnimalRepository animalRepository, IPhotoRepository photoRepository,
+            IAnimalShelterRepository animalShelterRepository)
         {
             _animalRepository = animalRepository;
             _photoRepository = photoRepository;
+            _animalShelterRepository = animalShelterRepository;
         }
 
         public IActionResult Get()
@@ -43,7 +46,7 @@ namespace AnimalShelters.API.Controllers
             var totalPages = (int)Math.Ceiling((double)totalAnimals / pageSize);
 
             IEnumerable<Animal> _animals = _animalRepository
-                .GetAll()
+                .AllIncluding(a => a.AnimalsToAnimalShelter)
                 .OrderBy(u => u.Id)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(currentPage)
@@ -60,7 +63,7 @@ namespace AnimalShelters.API.Controllers
         public IActionResult GetAll()
         {
             IEnumerable<Animal> _animals = _animalRepository
-                .GetAll()
+                .AllIncluding(a => a.AnimalsToAnimalShelter)
                 .OrderBy(a => a.Id)
                 .ToList();
 
@@ -72,7 +75,7 @@ namespace AnimalShelters.API.Controllers
         [HttpGet("{id}", Name = "GetAnimal")]
         public IActionResult Get(int id)
         {
-            Animal _animal = _animalRepository.GetSingle(a => a.Id == id);
+            Animal _animal = _animalRepository.GetSingle(a => a.Id == id, a => a.AnimalsToAnimalShelter);
 
             if (_animal != null)
             {
@@ -82,6 +85,25 @@ namespace AnimalShelters.API.Controllers
             }
             else
             {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("{id}/details", Name = "GetAnimalDetails")]
+        public IActionResult GetDetails(int id)
+        {
+            Animal _animal = _animalRepository.GetSingle(a => a.Id == id, a => a.AnimalsToAnimalShelter);
+
+            if (_animal != null)
+            {
+                AnimalDetailsViewModel _animalViewModel = Mapper.Map<Animal, AnimalDetailsViewModel>(_animal);
+
+                AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(s => s.Id == _animal.AnimalsToAnimalShelter.AnimalShelterId);
+                _animalViewModel.AnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
+
+                return new OkObjectResult(_animalViewModel);
+            }
+            else {
                 return NotFound();
             }
         }
@@ -106,7 +128,7 @@ namespace AnimalShelters.API.Controllers
         public IActionResult GetNewestAnimals()
         {
             IEnumerable<Animal> _animals = _animalRepository
-                .GetAll()
+                .AllIncluding(a => a.AnimalsToAnimalShelter)
                 .OrderByDescending(a => a.InShelterFrom)
                 .ToList();
 

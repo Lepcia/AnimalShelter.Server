@@ -17,6 +17,8 @@ namespace AnimalShelters.Data
         public DbSet<Module> Modules { get; set; }
         public DbSet<Rights> Rights { get; set; }
         public DbSet<RightsToUser> RightsToUsers { get; set; }
+        public DbSet<UserToAnimalShelter> UserToAnimalShelters { get; set; }
+        public DbSet<AnimalsToAnimalShelter> AnimalsToAnimalShelters { get; set; }
 
         public AnimalShelterContext(DbContextOptions options) : base(options) { }
 
@@ -152,6 +154,12 @@ namespace AnimalShelters.Data
 
             modelBuilder.Entity<Module>()
                 .ToTable("Module");
+
+            modelBuilder.Entity<UserToAnimalShelter>()
+                .ToTable("UserToAnimalShelter");
+
+            modelBuilder.Entity<AnimalsToAnimalShelter>()
+                .ToTable("AnimalsToAnimalShelter");
         }
 
     }

@@ -16,6 +16,7 @@ namespace AnimalShelters.API.ViewModels
         public string Email { get; set; }
         public string Avatar { get; set; }
         public int[] FavoriteAnimals { get; set; }
+        public int UserToAnimalShelter { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

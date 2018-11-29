@@ -16,15 +16,17 @@ namespace AnimalShelters.API.Controllers
     {
         IAnimalShelterRepository _animalShelterRepository;
         IAnimalRepository _animalRepository;
+        IUserRepository _userRepository;
 
         int page = 1;
         int pageSize = 10;
-        private object _userRepository;
 
-        public AnimalSheltersController(IAnimalShelterRepository animalShelterRepository, IAnimalRepository animalRepository)
+        public AnimalSheltersController(IAnimalShelterRepository animalShelterRepository, IAnimalRepository animalRepository,
+            IUserRepository userRepository)
         {
             _animalShelterRepository = animalShelterRepository;
             _animalRepository = animalRepository;
+            _userRepository = userRepository;
         }
 
         public IActionResult Get()
@@ -44,7 +46,7 @@ namespace AnimalShelters.API.Controllers
             var totalPages = (int)Math.Ceiling((double)totalUsers / pageSize);
 
             IEnumerable<AnimalShelter> _shelters = _animalShelterRepository
-                .AllIncluding(u => u.Animals)
+                .AllIncluding(u => u.Animals, u => u.UsersToAnimalShelter)
                 .OrderBy(u => u.Id)
                 .Skip((currentPage - 1) * pageSize)
                 .Take(currentPageSize)
@@ -61,7 +63,7 @@ namespace AnimalShelters.API.Controllers
         public IActionResult GatAll()
         {
             IEnumerable<AnimalShelter> _animalShelters = _animalShelterRepository
-                .GetAll()
+                .AllIncluding(u => u.Animals)
                 .OrderBy(s => s.Id)
                 .ToList();
 
@@ -73,7 +75,7 @@ namespace AnimalShelters.API.Controllers
         [HttpGet("{id}", Name = "GetShelter")]
         public IActionResult Get(int id)
         {
-            AnimalShelter _shelter = _animalShelterRepository.GetSingle(s => s.Id == id, s => s.Animals);
+            AnimalShelter _shelter = _animalShelterRepository.GetSingle(s => s.Id == id, s => s.Animals, s => s.UsersToAnimalShelter);
 
             if (_shelter != null)
             {
@@ -89,11 +91,23 @@ namespace AnimalShelters.API.Controllers
         [HttpGet("{id}/details", Name = "GetShelterDetails")]
         public IActionResult GetDetails(int id)
         {
-            AnimalShelter _shelter = _animalShelterRepository.GetSingle(s => s.Id == id, s => s.Animals);
+            AnimalShelter _shelter = _animalShelterRepository.GetSingle(s => s.Id == id, s => s.Animals, s => s.UsersToAnimalShelter);
 
             if (_shelter != null)
             {
                 AnimalShelterDetailsViewModel _shelterViewModel = Mapper.Map<AnimalShelter, AnimalShelterDetailsViewModel>(_shelter);
+                foreach (var animal in _shelter.Animals)
+                {
+                    Animal _animalDb = _animalRepository.GetSingle(animal.Id);
+                    _shelterViewModel.Animals.Add(Mapper.Map<Animal, AnimalViewModel>(_animalDb));
+                }
+
+                foreach (var user in _shelter.UsersToAnimalShelter)
+                {
+                    User _userDb = _userRepository.GetSingle(user.UserId);
+                    _shelterViewModel.Users.Add(Mapper.Map<User, UserViewModel>(_userDb));
+                }
+
                 return new OkObjectResult(_shelterViewModel);
             }
             else
@@ -189,7 +203,7 @@ namespace AnimalShelters.API.Controllers
             {
                 if (_animalShelter.Animals.Where(a => a.Id == animalId).Count() == 0)
                 {
-                    _animalShelter.Animals.Add(new Animal { Id = animalId });
+                    _animalShelter.Animals.Add(new AnimalsToAnimalShelter { AnimalId = animalId, AnimalShelterId = _animalShelter.Id });
                     _animalShelterRepository.Commit();
                 }
                 else
@@ -217,7 +231,7 @@ namespace AnimalShelters.API.Controllers
             }
             else
             {
-                IEnumerable<Animal> _animals = _animalRepository.FindBy(a => a.IdShelter == id );
+                IEnumerable<Animal> _animals = _animalRepository.FindBy(a => a.AnimalsToAnimalShelter.AnimalShelterId == id );
 
                 foreach (var animal in _animals)
                 {
@@ -237,7 +251,7 @@ namespace AnimalShelters.API.Controllers
         public IActionResult DeleteAnimalFromShelter(int idShelter, int idAnimal)
         {
             AnimalShelter _animalShelter = _animalShelterRepository.GetSingle(idShelter);
-            Animal _animal = _animalRepository.GetSingle(a => a.Id == idAnimal && a.IdShelter == idShelter);
+            Animal _animal = _animalRepository.GetSingle(a => a.Id == idAnimal && a.AnimalsToAnimalShelter.AnimalShelterId == idShelter);
 
             if (_animalShelter == null || _animal == null)
             {
@@ -245,7 +259,7 @@ namespace AnimalShelters.API.Controllers
             }
             else
             {
-                ICollection<Animal> animals = _animalShelter.Animals.Where(a => a.Id != _animal.Id).ToList();
+                ICollection<AnimalsToAnimalShelter> animals = _animalShelter.Animals.Where(a => a.AnimalId != _animal.Id).ToList();
                 _animalShelter.Animals = animals;
                 _animalShelterRepository.Commit();
 

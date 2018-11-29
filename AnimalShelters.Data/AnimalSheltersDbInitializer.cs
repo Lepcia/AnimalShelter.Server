@@ -23,7 +23,6 @@ namespace AnimalShelters.Data
                 Animal animal_01 = new Animal
                 {
                     Name = "Burek",
-                    IdShelter = 1,
                     Age = 2,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Years,
                     Breed = "Owczarek",
@@ -31,12 +30,12 @@ namespace AnimalShelters.Data
                     Size = AnimalSizeEnum.Medium,
                     Species = AnimalSpeciesEnum.Dog,
                     Description = "Pies Burek.",
-                    InShelterFrom = new DateTime(2018, 09, 29)
+                    InShelterFrom = new DateTime(2018, 09, 29),
+                    AnimalsToAnimalShelter = new AnimalsToAnimalShelter { AnimalShelterId = 1, AnimalId = 1}
                 };
                 Animal animal_02 = new Animal
                 {
                     Name = "Jolka",
-                    IdShelter = 2,
                     Age = 7,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Months,
                     Breed = "Rogdoll",
@@ -44,12 +43,12 @@ namespace AnimalShelters.Data
                     Size = AnimalSizeEnum.Medium,
                     Species = AnimalSpeciesEnum.Cat,
                     Description = "Kotka Jolka.",
-                    InShelterFrom = new DateTime(2018, 10, 20)
+                    InShelterFrom = new DateTime(2018, 10, 20),
+                    AnimalsToAnimalShelter = new AnimalsToAnimalShelter { AnimalShelterId = 2, AnimalId = 2}
                 };
                 Animal animal_03 = new Animal
                 {
                     Name = "Raban",
-                    IdShelter = 2,
                     Age = 2,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Years,
                     Breed = "American shorthair",
@@ -57,7 +56,8 @@ namespace AnimalShelters.Data
                     Size = AnimalSizeEnum.Medium,
                     Species = AnimalSpeciesEnum.Cat,
                     Description = "Kot Raban.",
-                    InShelterFrom = new DateTime(2018, 06, 13)
+                    InShelterFrom = new DateTime(2018, 06, 13),
+                    AnimalsToAnimalShelter = new AnimalsToAnimalShelter { AnimalShelterId = 2, AnimalId = 3}
                 };
 
                 context.Animals.Add(animal_01);
@@ -98,7 +98,8 @@ namespace AnimalShelters.Data
                     LastName = "Socha",
                     FavoriteAnimals = {
                         new FavoriteAnimal { AnimalId = 1, UserId = 3 }
-                    }
+                    },
+                    UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 2, UserId = 3}
                 };
                 User user_03 = new User
                 {
@@ -107,7 +108,8 @@ namespace AnimalShelters.Data
                     FavoriteAnimals =
                     {
                         new FavoriteAnimal { AnimalId = 2, UserId = 4 }
-                    }
+                    },
+                    UserToAnimalShelter =  new UserToAnimalShelter {AnimalShelterId = 1, UserId = 4}
                 };
 
                 context.Users.Add(admin);

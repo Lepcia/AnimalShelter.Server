@@ -16,6 +16,7 @@ namespace AnimalShelters.API.ViewModels
         public string Street { get; set; }
         public string Number { get; set; }
         public int[] Animals { get; set; }
+        public int[] Users { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Avatar { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace AnimalShelters.Model.Entities
@@ -7,7 +8,8 @@ namespace AnimalShelters.Model.Entities
     public class AnimalShelter : IEntityBase
     {
         public AnimalShelter() {
-            Animals = new List<Animal>();
+            Animals = new List<AnimalsToAnimalShelter>();
+            UsersToAnimalShelter = new List<UserToAnimalShelter>();
         }
 
         public int Id { get; set; }
@@ -30,7 +32,9 @@ namespace AnimalShelters.Model.Entities
             }
         }
 
-        public ICollection<Animal> Animals { get; set; }
+        public ICollection<AnimalsToAnimalShelter> Animals { get; set; }
+
+        public ICollection<UserToAnimalShelter> UsersToAnimalShelter { get; set; }
 
 
     }

@@ -16,16 +16,18 @@ namespace AnimalShelters.API.Controllers
     {
         private IUserRepository _userRepository;
         private IAnimalRepository _animalRepository;
+        private IAnimalShelterRepository _animalShelterRepository;
         private IFavoriteAnimalRepository _favoriteAnimalRepository;
 
         int page = 1;
         int pageSize = 10;
 
         public UsersController(IUserRepository userRepository, IAnimalRepository animalRepository,
-            IFavoriteAnimalRepository favoriteAnimalRepository)
+            IFavoriteAnimalRepository favoriteAnimalRepository, IAnimalShelterRepository animalShelterRepository)
         {
             _userRepository = userRepository;
             _animalRepository = animalRepository;
+            _animalShelterRepository = animalShelterRepository;
             _favoriteAnimalRepository = favoriteAnimalRepository;
         }
 
@@ -63,7 +65,7 @@ namespace AnimalShelters.API.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public IActionResult Get(int id)
         {
-            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals);
+            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals, u => u.UserToAnimalShelter);
 
             if (_user != null)
             {
@@ -79,7 +81,7 @@ namespace AnimalShelters.API.Controllers
         [HttpGet("{id}/details", Name = "GetUserDetails")]
         public IActionResult GetDetails(int id)
         {
-            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals);
+            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals, u => u.UserToAnimalShelter);
 
             if (_user != null)
             {
@@ -90,6 +92,9 @@ namespace AnimalShelters.API.Controllers
                     Animal _animalDb = _animalRepository.GetSingle(animal.AnimalId);
                     _userViewModel.FavoriteAnimals.Add(Mapper.Map<Animal, AnimalViewModel>(_animalDb));
                 }
+            
+                AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(_user.UserToAnimalShelter.AnimalShelterId);
+                _userViewModel.UserToAnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
 
                 return new OkObjectResult(_userViewModel);
             }

@@ -19,6 +19,7 @@ namespace AnimalShelters.API.ViewModels
         public string Description { get; set; }
         public ICollection<PhotoViewModel> Photos { get; set; }
         public DateTime InShelterFrom { get; set; }
+        public AnimalShelterViewModel AnimalShelter { get; set; }
 
         public string[] AgesAccuracy { get; set; }
         public string[] Sexes { get; set; }
