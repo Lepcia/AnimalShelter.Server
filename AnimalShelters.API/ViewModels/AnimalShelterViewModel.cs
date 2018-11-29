@@ -15,11 +15,22 @@ namespace AnimalShelters.API.ViewModels
         public string City { get; set; }
         public string Street { get; set; }
         public string Number { get; set; }
-        public string FullAdres { get; set; }
         public int[] Animals { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Avatar { get; set; }
+        private string fullAdres;
+        public string FullAdres
+        {
+            get
+            {
+                return fullAdres;
+            }
+            set
+            {
+                fullAdres = "" + Street + " " + Number + ", " + City + " " + PostalCode;
+            }
+        }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

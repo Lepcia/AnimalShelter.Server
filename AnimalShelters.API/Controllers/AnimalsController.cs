@@ -86,6 +86,35 @@ namespace AnimalShelters.API.Controllers
             }
         }
 
+        [HttpGet("search", Name = "SearchAnimals")]
+        public IActionResult Get([FromBody]AnimalSearchViewModel animalsSearch)
+        {
+            AnimalSexEnum sex = (AnimalSexEnum)Enum.Parse(typeof(AnimalSexEnum), animalsSearch.Sex);
+            AnimalSpeciesEnum species = (AnimalSpeciesEnum)Enum.Parse(typeof(AnimalSpeciesEnum), animalsSearch.Specie);
+            IEnumerable<Animal> _animals = _animalRepository.FindBy(a =>
+            a.Name == (animalsSearch.Name.Length > 0 ? animalsSearch.Name : a.Name) &&
+            a.Breed == (animalsSearch.Breed.Length > 0 ? animalsSearch.Breed : a.Breed) &&
+            a.Sex == sex &&
+            a.Species == species).ToList();
+
+            IEnumerable<AnimalViewModel> _animalViewModel = Mapper.Map<IEnumerable<Animal>, IEnumerable<AnimalViewModel>>(_animals);
+
+            return new OkObjectResult(_animalViewModel);
+        }
+
+        [HttpGet("newest", Name = "NewestAnimals")]
+        public IActionResult GetNewestAnimals()
+        {
+            IEnumerable<Animal> _animals = _animalRepository
+                .GetAll()
+                .OrderByDescending(a => a.InShelterFrom)
+                .ToList();
+
+            IEnumerable<AnimalViewModel> _animalViewModel = Mapper.Map<IEnumerable<Animal>, IEnumerable<AnimalViewModel>>(_animals);
+
+            return new OkObjectResult(_animalViewModel);
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody]AnimalViewModel animal)
         {

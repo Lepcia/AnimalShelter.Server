@@ -30,7 +30,8 @@ namespace AnimalShelters.Data
                     Sex = AnimalSexEnum.Male,
                     Size = AnimalSizeEnum.Medium,
                     Species = AnimalSpeciesEnum.Dog,
-                    Description = "Pies Burek."
+                    Description = "Pies Burek.",
+                    InShelterFrom = new DateTime(2018, 09, 29)
                 };
                 Animal animal_02 = new Animal
                 {
@@ -42,11 +43,26 @@ namespace AnimalShelters.Data
                     Sex = AnimalSexEnum.Female,
                     Size = AnimalSizeEnum.Medium,
                     Species = AnimalSpeciesEnum.Cat,
-                    Description = "Kotka Jolka."
+                    Description = "Kotka Jolka.",
+                    InShelterFrom = new DateTime(2018, 10, 20)
+                };
+                Animal animal_03 = new Animal
+                {
+                    Name = "Raban",
+                    IdShelter = 2,
+                    Age = 2,
+                    AgeAccuracy = AnimalAgeAccuracyEnum.Years,
+                    Breed = "American shorthair",
+                    Sex = AnimalSexEnum.Male,
+                    Size = AnimalSizeEnum.Medium,
+                    Species = AnimalSpeciesEnum.Cat,
+                    Description = "Kot Raban.",
+                    InShelterFrom = new DateTime(2018, 06, 13)
                 };
 
                 context.Animals.Add(animal_01);
                 context.Animals.Add(animal_02);
+                context.Animals.Add(animal_03);
 
                 context.SaveChanges();
             }
@@ -130,7 +146,7 @@ namespace AnimalShelters.Data
             if (!context.Modules.Any())
             {
                 Module module_01 = new Module { Id = 1, Symbol = "ADMIN", Name = "Administration", Icon = "ic_https_black_18dp", Order = 1 };
-                Module module_02 = new Module { Id = 2, Symbol = "FAVORITES", Name = "Favorites animals", Icon = "ic_favorite_black_18dp", Order = 3 };
+                Module module_02 = new Module { Id = 2, Symbol = "FAVORITE", Name = "Favorite animals", Icon = "ic_favorite_black_18dp", Order = 3 };
                 Module module_03 = new Module { Id = 3, Symbol = "SHELTERS", Name = "Animal shelters", Icon = "ic_assignment_black_18dp", Order = 5 };
                 Module module_04 = new Module { Id = 4, Symbol = "ANIMALS", Name = "Animals", Icon = "ic_pets_black_18dp", Order = 4 };
                 Module module_05 = new Module { Id = 5, Symbol = "SEARCH", Name = "Search", Icon = "baseline_search_black_18dp", Order = 2 };

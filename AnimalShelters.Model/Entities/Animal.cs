@@ -28,5 +28,6 @@ namespace AnimalShelters.Model.Entities
         public AnimalSizeEnum Size { get; set; }
         public string Description { get; set; }
         public ICollection<Photo> Photos { get; set; }
+        public DateTime InShelterFrom { get; set; }
     }
 }

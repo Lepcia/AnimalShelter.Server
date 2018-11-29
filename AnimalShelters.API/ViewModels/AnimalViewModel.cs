@@ -20,6 +20,7 @@ namespace AnimalShelters.API.ViewModels
         public string Size { get; set; }
         public string Description { get; set; }
         public int[] Photos { get; set; }
+        public DateTime InShelterFrom { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

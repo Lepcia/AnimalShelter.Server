@@ -17,6 +17,7 @@ namespace AnimalShelters.API.ViewModels.Validations
             RuleFor(animal => animal.AgeAccuracy).NotEmpty().WithMessage("Age accuracy cannot be empty!");
             RuleFor(animal => animal.Species).NotEmpty().WithMessage("Species cannot be empty!");
             RuleFor(animal => animal.Description).NotEmpty().WithMessage("Description cannot be empty!");
+            RuleFor(animal => animal.InShelterFrom).NotEmpty().WithMessage("In shelter from cannot be empty!");
         }
     }
 }
