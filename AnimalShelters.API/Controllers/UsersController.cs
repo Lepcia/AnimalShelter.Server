@@ -118,6 +118,7 @@ namespace AnimalShelters.API.Controllers
                     Animal _animalDb = _animalRepository.GetSingle(a => a.Id == animal.AnimalId, a => a.AnimalsToAnimalShelter);
                     AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(s => s.Id == _animalDb.AnimalsToAnimalShelter.AnimalShelterId);
                     AnimalDetailsViewModel _animalDetailsViewModel = Mapper.Map<Animal, AnimalDetailsViewModel>(_animalDb);
+                    _animalDetailsViewModel.IsFavorite = true;
                     _animalDetailsViewModel.AnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
                     _animalViewModel.Add(_animalDetailsViewModel);
                 }
