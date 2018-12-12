@@ -129,7 +129,24 @@ namespace AnimalShelters.API.Controllers
                 return NotFound();
             }
         }
-        
+
+        [HttpGet("{id}/favoriteIds", Name = "GetFavoriteIds")]
+        public IActionResult GetFavoriteAnimalsIds(int id)
+        {
+            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals);
+
+            List<int> favoriteIds = new List<int>();
+            if (_user != null)
+            {
+                foreach (var animal in _user.FavoriteAnimals)
+                {
+                    favoriteIds.Add(animal.AnimalId);
+                }
+                return new OkObjectResult(new { favorites = favoriteIds });
+            }
+            return new OkObjectResult(new { favorites = favoriteIds });
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody]UserViewModel user)
         {

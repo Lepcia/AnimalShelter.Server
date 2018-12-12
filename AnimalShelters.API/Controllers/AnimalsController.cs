@@ -17,16 +17,18 @@ namespace AnimalShelters.API.Controllers
         IAnimalRepository _animalRepository;
         IPhotoRepository _photoRepository;
         IAnimalShelterRepository _animalShelterRepository;
+        IUserRepository _userRepository;
 
         int page = 1;
         int pageSize = 10;
 
         public AnimalsController(IAnimalRepository animalRepository, IPhotoRepository photoRepository,
-            IAnimalShelterRepository animalShelterRepository)
+            IAnimalShelterRepository animalShelterRepository, IUserRepository userRepository)
         {
             _animalRepository = animalRepository;
             _photoRepository = photoRepository;
             _animalShelterRepository = animalShelterRepository;
+            _userRepository = userRepository;
         }
 
         public IActionResult Get()
@@ -79,6 +81,35 @@ namespace AnimalShelters.API.Controllers
             }
 
             return new OkObjectResult(_animalViewModel);
+        }
+
+        [HttpGet("user/{id}", Name = "GetAllByUser")]
+        public IActionResult GetByUser(int id)
+        {
+            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals);
+            if (_user != null)
+            {
+                IEnumerable<Animal> _animals = _animalRepository
+                    .AllIncluding(a => a.AnimalsToAnimalShelter)
+                    .OrderBy(a => a.Id)
+                    .ToList();
+
+                IList<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();
+
+                foreach (var animal in _animals)
+                {
+
+                    AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(s => s.Id == animal.AnimalsToAnimalShelter.AnimalShelterId);
+                    AnimalDetailsViewModel _animalDetailsViewModel = Mapper.Map<Animal, AnimalDetailsViewModel>(animal);
+                    if (_user.FavoriteAnimals.Select(x => x.AnimalId).ToList().Contains(animal.Id)) _animalDetailsViewModel.IsFavorite = true;
+                    _animalDetailsViewModel.AnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
+                    _animalViewModel.Add(_animalDetailsViewModel);
+                }
+
+                return new OkObjectResult(_animalViewModel);
+            }
+            return NotFound();
+
         }
 
         [HttpGet("{id}", Name = "GetAnimal")]
