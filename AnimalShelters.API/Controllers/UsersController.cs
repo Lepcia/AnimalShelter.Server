@@ -198,7 +198,7 @@ namespace AnimalShelters.API.Controllers
         }
 
         [HttpPut("{id}/addFavoriteAnimal")]
-        public IActionResult AddFavoriteAnimal(int id, [FromBody]int animalId)
+        public IActionResult AddFavoriteAnimal(int id, int animalId)
         {
             if (!ModelState.IsValid)
             {
