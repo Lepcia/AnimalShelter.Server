@@ -64,6 +64,8 @@ namespace AnimalShelters.API.ViewModels.Mappings
                 map => map.UseValue(Enum.GetNames(typeof(AnimalSizeEnum)).ToArray()));
 
             CreateMap<Photo, PhotoViewModel>();
+
+            CreateMap<AnimalShelter, AnimalShelterSimpleViewModel>();
          }
     }
 }

@@ -8,6 +8,7 @@ namespace AnimalShelters.API.ViewModels
     public class AnimalSearchViewModel
     {
         public string Name { get; set; }
+        public string ShelterName { get; set; }
         public int AgeFrom { get; set; }
         public int AgeTo { get; set; }
         public string AgeAccuracy { get; set; }

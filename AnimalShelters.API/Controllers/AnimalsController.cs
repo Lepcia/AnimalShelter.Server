@@ -112,6 +112,12 @@ namespace AnimalShelters.API.Controllers
 
         }
 
+        [HttpPost("user/{id}")]
+        public IActionResult GetByUserAndParams(int id, [FromBody]AnimalSearchViewModel search)
+        {
+            return NotFound();
+        }
+
         [HttpGet("{id}", Name = "GetAnimal")]
         public IActionResult Get(int id)
         {
