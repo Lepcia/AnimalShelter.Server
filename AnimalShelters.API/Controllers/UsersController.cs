@@ -1,16 +1,26 @@
 ﻿using AnimalShelters.API.Core;
+using AnimalShelters.API.Helpers;
+using AnimalShelters.API.Services;
+using AnimalShelters.API.UserDtoN;
 using AnimalShelters.API.ViewModels;
 using AnimalShelters.Data.Abstract;
 using AnimalShelters.Model.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AnimalShelters.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
@@ -18,17 +28,85 @@ namespace AnimalShelters.API.Controllers
         private IAnimalRepository _animalRepository;
         private IAnimalShelterRepository _animalShelterRepository;
         private IFavoriteAnimalRepository _favoriteAnimalRepository;
+        private IUserService _userService;
+        private readonly AppSettings _appSettings;
 
         int page = 1;
         int pageSize = 10;
 
         public UsersController(IUserRepository userRepository, IAnimalRepository animalRepository,
-            IFavoriteAnimalRepository favoriteAnimalRepository, IAnimalShelterRepository animalShelterRepository)
+            IFavoriteAnimalRepository favoriteAnimalRepository, IAnimalShelterRepository animalShelterRepository,
+            IUserService userService, IOptions<AppSettings> appSettings)
         {
             _userRepository = userRepository;
             _animalRepository = animalRepository;
             _animalShelterRepository = animalShelterRepository;
             _favoriteAnimalRepository = favoriteAnimalRepository;
+            _userService = userService;
+            _appSettings = appSettings.Value;
+
+        }
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody]UserDto userDto)
+        {
+            var user = _userService.Authenticate(userDto.Email, userDto.Password);
+
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            // return basic user info (without password) and token to store client side
+            return Ok(new
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Token = tokenString
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult Register([FromBody]UserDto userDto)
+        {
+            // map dto to entity
+            var user = Mapper.Map<User>(userDto);
+
+            try
+            {
+                // save 
+                _userService.Create(user, userDto.Password);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var users = _userService.GetAll();
+            var userDtos = Mapper.Map<IList<UserDto>>(users);
+            return Ok(userDtos);
         }
 
         [HttpGet]
@@ -65,17 +143,9 @@ namespace AnimalShelters.API.Controllers
         [HttpGet("{id}", Name = "GetUser")]
         public IActionResult Get(int id)
         {
-            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals, u => u.UserToAnimalShelter);
-
-            if (_user != null)
-            {
-                UserViewModel _userViewModel = Mapper.Map<User, UserViewModel>(_user);
-                return new OkObjectResult(_userViewModel);
-            }
-            else
-            {
-                return NotFound();
-            }
+            User user = _userService.GetById(id);
+            var userDto = Mapper.Map<UserDto>(user);
+            return Ok(userDto);
         }
 
         [HttpGet("{id}/details", Name = "GetUserDetails")]
@@ -148,53 +218,24 @@ namespace AnimalShelters.API.Controllers
             return new OkObjectResult(new { favorites = favoriteIds });
         }
 
-        [HttpPost]
-        public IActionResult Create([FromBody]UserViewModel user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            User _newUser = Mapper.Map<UserViewModel, User>(user);
-            _userRepository.Add(_newUser);
-            _userRepository.Commit();
-
-            user = Mapper.Map<User, UserViewModel>(_newUser);
-
-            CreatedAtRouteResult result = CreatedAtRoute("GetUser", new { controller = "Users", id = user.Id }, user);
-
-            return result;
-        }
-
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]UserViewModel user)
+        public IActionResult Update(int id, [FromBody]UserDto userDto)
         {
-            if (!ModelState.IsValid)
+            // map dto to entity and set id
+            var user = Mapper.Map<User>(userDto);
+            user.Id = id;
+
+            try
             {
-                return BadRequest(ModelState);
+                // save 
+                _userService.Update(user, userDto.Password);
+                return Ok();
             }
-
-            User _userDb = _userRepository.GetSingle(id);
-
-            if (_userDb == null)
+            catch (AppException ex)
             {
-                return NotFound();
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
             }
-            else
-            {
-                _userDb.FirstName = user.FirstName;
-                _userDb.LastName = user.LastName;
-                _userDb.Email = user.Email;
-                _userDb.Avatar = user.Avatar;
-                _userDb.DateOfBirth = user.DateOfBirth;
-            }
-
-            _userRepository.Commit();
-
-            user = Mapper.Map<User, UserViewModel>(_userDb);
-
-            return new NoContentResult();
         }
 
         [HttpPut("{id}/addFavoriteAnimal")]
@@ -232,34 +273,14 @@ namespace AnimalShelters.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            User _user = _userRepository.GetSingle(id);
-
-            if (_user == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                IEnumerable<FavoriteAnimal> _favoriteAnimals = _favoriteAnimalRepository.FindBy(fa => fa.UserId == id);
-
-                foreach (var animal in _favoriteAnimals)
-                {
-                    _favoriteAnimalRepository.Delete(animal);
-                }
-
-                _favoriteAnimalRepository.Commit();
-
-                _userRepository.Delete(_user);
-                _userRepository.Commit();
-
-                return new NoContentResult();
-            }
+            _userService.Delete(id);
+            return Ok();
         }
 
         [HttpDelete("{idUser}/{idAnimal}")]
         public IActionResult DeleteFavoriteAnimal(int idUser, int idAnimal)
         {
-            User _user = _userRepository.GetSingle(idUser);
+            User _user = _userService.GetById(idUser);
             FavoriteAnimal _favoriteAnimal = _favoriteAnimalRepository.GetSingle(fa => fa.AnimalId == idAnimal && fa.UserId == idUser);
 
             if (_user == null || _favoriteAnimal == null)

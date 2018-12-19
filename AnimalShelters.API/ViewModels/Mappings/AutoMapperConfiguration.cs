@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using AnimalShelters.API.UserDtoN;
+using AnimalShelters.Model.Entities;
+using AutoMapper;
 
 namespace AnimalShelters.API.ViewModels.Mappings
 {
@@ -10,6 +12,8 @@ namespace AnimalShelters.API.ViewModels.Mappings
             {
                 x.AddProfile<DomainToViewModelMappingProfile>();
                 x.AddProfile<ViewModelToDomainMappingProfile>();
+                x.CreateMap<User, UserDto>();
+                x.CreateMap<UserDto, User>();
             });
         }
     }

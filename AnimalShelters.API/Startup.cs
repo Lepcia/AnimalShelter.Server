@@ -13,6 +13,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using AnimalShelters.API.ViewModels.Mappings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using AnimalShelters.API.Services;
+using System.Threading.Tasks;
+using System.Text;
 
 namespace AnimalShelters.API
 {
@@ -63,10 +68,47 @@ namespace AnimalShelters.API
                             b => b.MigrationsAssembly("AnimalShelters.API"));
                         break;
                 }});
+            var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Secret"]);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        var userId = int.Parse(context.Principal.Identity.Name);
+                        var user = userService.GetById(userId);
+                        if (user == null)
+                        {
+                            // return unauthorized if user no longer exists
+                            context.Fail("Unauthorized");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            // configure DI for application services
+           
 
             services.AddScoped<IAnimalRepository, AnimalRepository>();
             services.AddScoped<IAnimalShelterRepository, AnimalShelterRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IFavoriteAnimalRepository, FavoriteAnimalRepository>();
             services.AddScoped<IRightsRepository, RightsRepository>();
