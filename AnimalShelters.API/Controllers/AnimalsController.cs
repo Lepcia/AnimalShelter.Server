@@ -112,6 +112,24 @@ namespace AnimalShelters.API.Controllers
 
         }
 
+        private DateTime GetDate(int value, AnimalAgeAccuracyEnum ageAccuracy)
+        {
+            DateTime date = DateTime.Now;
+            switch (ageAccuracy)
+            {
+                case AnimalAgeAccuracyEnum.Weeks:
+                    date = date.AddDays(value * 7);
+                    break;
+                case AnimalAgeAccuracyEnum.Months:
+                    date = date.AddDays(31 * value);
+                    break;
+                case AnimalAgeAccuracyEnum.Years:
+                    date = date.AddYears(value);
+                    break;
+            }
+            return date;
+        }
+
         //TODO: dodać po wieku zwierzecia
         [HttpPost("user/{id}")]
         public IActionResult GetByUserAndParams(int id, [FromBody]AnimalSearchViewModel animalsSearch)
@@ -122,11 +140,13 @@ namespace AnimalShelters.API.Controllers
                 AnimalSexEnum sex = (AnimalSexEnum)Enum.Parse(typeof(AnimalSexEnum), animalsSearch.Sex);
                 AnimalSpeciesEnum species = (AnimalSpeciesEnum)Enum.Parse(typeof(AnimalSpeciesEnum), animalsSearch.Species);
                 AnimalAgeAccuracyEnum ageAccuracy = (AnimalAgeAccuracyEnum)Enum.Parse(typeof(AnimalAgeAccuracyEnum), animalsSearch.AgeAccuracy);
+                DateTime dateFrom = GetDate(-animalsSearch.AgeFrom, ageAccuracy);
+                DateTime dateTo = GetDate(-animalsSearch.AgeTo, ageAccuracy);
 
                 IEnumerable<Animal> _animals = _animalRepository.AllIncluding(a => a.AnimalsToAnimalShelter, a => a.AnimalsToAnimalShelter.AnimalShelter)
-                    .Where(a => a.Name.Contains(animalsSearch.Name.Length > 0 ? animalsSearch.Name : a.Name) &&
-                a.Breed.Contains(animalsSearch.Breed.Length > 0 ? animalsSearch.Breed : a.Breed) &&
-                a.Sex == sex && a.Species == species &&
+                    .Where(a => a.Name.ToUpper().Contains(animalsSearch.Name.Length > 0 ? animalsSearch.Name.ToUpper() : a.Name.ToUpper()) &&
+                a.Breed.ToUpper().Contains(animalsSearch.Breed.Length > 0 ? animalsSearch.Breed.ToUpper() : a.Breed.ToUpper()) &&
+                a.Sex == sex && a.Species == species && a.DateOfBirth >= dateTo && a.DateOfBirth <= dateFrom &&
                 a.AnimalsToAnimalShelter.AnimalShelter.Name == animalsSearch.ShelterName).ToList();
 
                 IList<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();

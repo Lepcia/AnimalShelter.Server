@@ -23,6 +23,7 @@ namespace AnimalShelters.Data
                 Animal animal_01 = new Animal
                 {
                     Name = "Burek",
+                    DateOfBirth = new DateTime(2016,11,10),
                     Age = 2,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Years,
                     Breed = "Owczarek",
@@ -36,6 +37,7 @@ namespace AnimalShelters.Data
                 Animal animal_02 = new Animal
                 {
                     Name = "Jolka",
+                    DateOfBirth = new DateTime(2018,05,12),
                     Age = 7,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Months,
                     Breed = "Rogdoll",
@@ -49,6 +51,7 @@ namespace AnimalShelters.Data
                 Animal animal_03 = new Animal
                 {
                     Name = "Raban",
+                    DateOfBirth = new DateTime(2016,03,14),
                     Age = 2,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Years,
                     Breed = "American shorthair",
