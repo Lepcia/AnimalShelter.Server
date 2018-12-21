@@ -130,7 +130,6 @@ namespace AnimalShelters.API.Controllers
             return date;
         }
 
-        //TODO: dodać po wieku zwierzecia
         [HttpPost("user/{id}")]
         public IActionResult GetByUserAndParams(int id, [FromBody]AnimalSearchViewModel animalsSearch)
         {

@@ -72,6 +72,19 @@ namespace AnimalShelters.API.Controllers
             return new OkObjectResult(_shelterViewModel);
         }
 
+        [HttpPost("search")]
+        public IActionResult SearchShelters([FromBody]AnimalShelterSearchViewModel searchShelters)
+        {
+            IEnumerable<AnimalShelter> _animalShelters = _animalShelterRepository.AllIncluding(a => a.Animals, a => a.UsersToAnimalShelter)
+                .Where(a => a.Name.ToUpper().Contains(searchShelters.Name.Length > 0 ? searchShelters.Name.ToUpper() : a.Name.ToUpper()) && 
+                a.City.ToUpper().Contains(searchShelters.City.Length > 0 ? searchShelters.City.ToUpper() : a.City.ToUpper())
+                && a.Street.ToUpper().Contains(searchShelters.Street.Length > 0 ? searchShelters.Street.ToUpper() : a.Street.ToUpper())).ToList();
+
+            IEnumerable<AnimalShelterViewModel> _sheltetViewModel = Mapper.Map<IEnumerable<AnimalShelter>, IEnumerable<AnimalShelterViewModel>> (_animalShelters);
+
+            return new OkObjectResult(_sheltetViewModel);
+        }
+
         [HttpGet("{id}", Name = "GetShelter")]
         public IActionResult Get(int id)
         {
