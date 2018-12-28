@@ -179,6 +179,7 @@ namespace AnimalShelters.API.Controllers
             }
 
             User _userDb = _userRepository.GetSingle(id);
+            AnimalShelter shelter = _animalShelterRepository.GetSingle(x => x.Name == user.ShelterName);
 
             if (_userDb == null)
             {
@@ -191,6 +192,8 @@ namespace AnimalShelters.API.Controllers
                 _userDb.Email = user.Email;
                 _userDb.Avatar = user.Avatar;
                 _userDb.DateOfBirth = user.DateOfBirth;
+                _userDb.Role = (RoleEnum)Enum.Parse(typeof(RoleEnum), user.Role);
+                _userDb.UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = shelter.Id, UserId = user.Id };
             }
 
             _userRepository.Commit();

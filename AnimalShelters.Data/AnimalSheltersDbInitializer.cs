@@ -81,7 +81,8 @@ namespace AnimalShelters.Data
                     {
                         new FavoriteAnimal { AnimalId = 1, UserId = 1},
 
-                    }
+                    },
+                    Role = RoleEnum.Admin
                 };
 
                 User user_01 = new User
@@ -93,7 +94,8 @@ namespace AnimalShelters.Data
                     FavoriteAnimals = {
                         new FavoriteAnimal { AnimalId = 1, UserId = 2 },
                         new FavoriteAnimal { AnimalId = 2, UserId = 2}
-                    }
+                    },
+                    Role = RoleEnum.CommonUser
                 };
                 User user_02 = new User
                 {
@@ -102,6 +104,7 @@ namespace AnimalShelters.Data
                     FavoriteAnimals = {
                         new FavoriteAnimal { AnimalId = 1, UserId = 3 }
                     },
+                    Role = RoleEnum.ShelterUser,
                     UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 2, UserId = 3}
                 };
                 User user_03 = new User
@@ -112,6 +115,7 @@ namespace AnimalShelters.Data
                     {
                         new FavoriteAnimal { AnimalId = 2, UserId = 4 }
                     },
+                    Role = RoleEnum.ShelterUser,
                     UserToAnimalShelter =  new UserToAnimalShelter {AnimalShelterId = 1, UserId = 4}
                 };
 
