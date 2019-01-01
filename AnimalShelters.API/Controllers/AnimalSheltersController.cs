@@ -136,12 +136,12 @@ namespace AnimalShelters.API.Controllers
 
             if (_shelter != null)
             {
-                List<AnimalViewModel> _animalViewModel = new List<AnimalViewModel>();
+                List<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();
 
                 foreach (var animal in _shelter.Animals)
                 {
                     Animal _animalDb = _animalRepository.GetSingle(animal.Id);
-                    _animalViewModel.Add(Mapper.Map<Animal, AnimalViewModel>(_animalDb));
+                    _animalViewModel.Add(Mapper.Map<Animal, AnimalDetailsViewModel>(_animalDb));
                 }
 
                 return new OkObjectResult(_animalViewModel);

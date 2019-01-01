@@ -312,7 +312,7 @@ namespace AnimalShelters.API.Controllers
                 _animalRepository.Delete(_animal);
                 _animalRepository.Commit();
 
-                return new NoContentResult();
+                return new OkObjectResult(new { idAnimal = id});
             }
         }
     }

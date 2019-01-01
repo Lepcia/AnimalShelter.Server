@@ -193,14 +193,17 @@ namespace AnimalShelters.API.Controllers
                 _userDb.Avatar = user.Avatar;
                 _userDb.DateOfBirth = user.DateOfBirth;
                 _userDb.Role = (RoleEnum)Enum.Parse(typeof(RoleEnum), user.Role);
-                _userDb.UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = shelter.Id, UserId = user.Id };
+                if (shelter != null)
+                {
+                    _userDb.UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = shelter.Id, UserId = user.Id };
+                }
             }
 
             _userRepository.Commit();
 
             user = Mapper.Map<User, UserViewModel>(_userDb);
 
-            return new NoContentResult();
+            return new OkObjectResult(user);
         }
 
         [HttpPut("{id}/addFavoriteAnimal")]
