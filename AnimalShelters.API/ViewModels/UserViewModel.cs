@@ -12,11 +12,13 @@ namespace AnimalShelters.API.ViewModels
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public string Email { get; set; }
         public string Avatar { get; set; }
         public int[] FavoriteAnimals { get; set; }
         public int UserToAnimalShelter { get; set; }
+        public string Role { get; set; }
+        public string ShelterName { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

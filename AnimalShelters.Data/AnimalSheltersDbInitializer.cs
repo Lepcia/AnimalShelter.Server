@@ -23,6 +23,7 @@ namespace AnimalShelters.Data
                 Animal animal_01 = new Animal
                 {
                     Name = "Burek",
+                    DateOfBirth = new DateTime(2016,11,10),
                     Age = 2,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Years,
                     Breed = "Owczarek",
@@ -36,6 +37,7 @@ namespace AnimalShelters.Data
                 Animal animal_02 = new Animal
                 {
                     Name = "Jolka",
+                    DateOfBirth = new DateTime(2018,05,12),
                     Age = 7,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Months,
                     Breed = "Rogdoll",
@@ -49,6 +51,7 @@ namespace AnimalShelters.Data
                 Animal animal_03 = new Animal
                 {
                     Name = "Raban",
+                    DateOfBirth = new DateTime(2016,03,14),
                     Age = 2,
                     AgeAccuracy = AnimalAgeAccuracyEnum.Years,
                     Breed = "American shorthair",
@@ -78,7 +81,8 @@ namespace AnimalShelters.Data
                     {
                         new FavoriteAnimal { AnimalId = 1, UserId = 1},
 
-                    }
+                    },
+                    Role = RoleEnum.Admin
                 };
 
                 User user_01 = new User
@@ -90,7 +94,8 @@ namespace AnimalShelters.Data
                     FavoriteAnimals = {
                         new FavoriteAnimal { AnimalId = 1, UserId = 2 },
                         new FavoriteAnimal { AnimalId = 2, UserId = 2}
-                    }
+                    },
+                    Role = RoleEnum.CommonUser
                 };
                 User user_02 = new User
                 {
@@ -99,6 +104,7 @@ namespace AnimalShelters.Data
                     FavoriteAnimals = {
                         new FavoriteAnimal { AnimalId = 1, UserId = 3 }
                     },
+                    Role = RoleEnum.ShelterUser,
                     UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 2, UserId = 3}
                 };
                 User user_03 = new User
@@ -109,6 +115,7 @@ namespace AnimalShelters.Data
                     {
                         new FavoriteAnimal { AnimalId = 2, UserId = 4 }
                     },
+                    Role = RoleEnum.ShelterUser,
                     UserToAnimalShelter =  new UserToAnimalShelter {AnimalShelterId = 1, UserId = 4}
                 };
 
@@ -153,6 +160,7 @@ namespace AnimalShelters.Data
                 Module module_04 = new Module { Id = 4, Symbol = "ANIMALS", Name = "Animals", Icon = "ic_pets_black_18dp", Order = 5 };
                 Module module_05 = new Module { Id = 5, Symbol = "SEARCH", Name = "Search", Icon = "baseline_search_black_18dp", Order = 3 };
                 Module module_06 = new Module { Id = 6, Symbol = "NEWS", Name = "News board", Icon = "ic_list_black_18dp", Order = 2 };
+                Module module_07 = new Module { Id = 7, Symbol = "SETTINGS", Name = "Settings", Icon = "baseline_settings_black_18dp", Order = 7 };
 
                 context.Modules.Add(module_01);
                 context.Modules.Add(module_02);
@@ -160,6 +168,7 @@ namespace AnimalShelters.Data
                 context.Modules.Add(module_04);
                 context.Modules.Add(module_05);
                 context.Modules.Add(module_06);
+                context.Modules.Add(module_07);
 
                 context.SaveChanges();
             }
@@ -175,6 +184,7 @@ namespace AnimalShelters.Data
                 Rights right_08 = new Rights { Symbol = "ADD_ANIMAL", Name = "Add animal", IdModule = 4 };
                 Rights right_09 = new Rights { Symbol = "ADD_SHELTER", Name = "Add shelter", IdModule = 3 };
                 Rights right_10 = new Rights { Symbol = "DEFAULT", Name = "News board", IdModule = 6 };
+                Rights right_11 = new Rights { Symbol = "DEFAULT", Name = "Settings", IdModule = 7 };
 
                 context.Rights.Add(right_01);
                 context.Rights.Add(right_02);
@@ -186,6 +196,7 @@ namespace AnimalShelters.Data
                 context.Rights.Add(right_08);
                 context.Rights.Add(right_09);
                 context.Rights.Add(right_10);
+                context.Rights.Add(right_11);
 
                 context.SaveChanges();
             }
@@ -214,6 +225,10 @@ namespace AnimalShelters.Data
                 RightsToUser rightToUser_21 = new RightsToUser { IdRight = 10, IdUser = 2 };
                 RightsToUser rightToUser_22 = new RightsToUser { IdRight = 10, IdUser = 3 };
                 RightsToUser rightToUser_23 = new RightsToUser { IdRight = 10, IdUser = 4 };
+                RightsToUser rightToUser_24 = new RightsToUser { IdRight = 11, IdUser = 1 };
+                RightsToUser rightToUser_25 = new RightsToUser { IdRight = 11, IdUser = 2 };
+                RightsToUser rightToUser_26 = new RightsToUser { IdRight = 11, IdUser = 3 };
+                RightsToUser rightToUser_27 = new RightsToUser { IdRight = 11, IdUser = 4 };
 
                 context.RightsToUsers.Add(rightToUser_01);
                 context.RightsToUsers.Add(rightToUser_02);
@@ -238,6 +253,10 @@ namespace AnimalShelters.Data
                 context.RightsToUsers.Add(rightToUser_21);
                 context.RightsToUsers.Add(rightToUser_22);
                 context.RightsToUsers.Add(rightToUser_23);
+                context.RightsToUsers.Add(rightToUser_24);
+                context.RightsToUsers.Add(rightToUser_25);
+                context.RightsToUsers.Add(rightToUser_26);
+                context.RightsToUsers.Add(rightToUser_27);
 
                 context.SaveChanges();
             }

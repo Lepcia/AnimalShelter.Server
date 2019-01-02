@@ -11,6 +11,7 @@ namespace AnimalShelters.API.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public int Age { get; set; }
         public string AgeAccuracy { get; set; }
         public string AgeString { get; set; }

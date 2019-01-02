@@ -72,6 +72,19 @@ namespace AnimalShelters.API.Controllers
             return new OkObjectResult(_shelterViewModel);
         }
 
+        [HttpPost("search")]
+        public IActionResult SearchShelters([FromBody]AnimalShelterSearchViewModel searchShelters)
+        {
+            IEnumerable<AnimalShelter> _animalShelters = _animalShelterRepository.AllIncluding(a => a.Animals, a => a.UsersToAnimalShelter)
+                .Where(a => a.Name.ToUpper().Contains(searchShelters.Name.Length > 0 ? searchShelters.Name.ToUpper() : a.Name.ToUpper()) && 
+                a.City.ToUpper().Contains(searchShelters.City.Length > 0 ? searchShelters.City.ToUpper() : a.City.ToUpper())
+                && a.Street.ToUpper().Contains(searchShelters.Street.Length > 0 ? searchShelters.Street.ToUpper() : a.Street.ToUpper())).ToList();
+
+            IEnumerable<AnimalShelterViewModel> _sheltetViewModel = Mapper.Map<IEnumerable<AnimalShelter>, IEnumerable<AnimalShelterViewModel>> (_animalShelters);
+
+            return new OkObjectResult(_sheltetViewModel);
+        }
+
         [HttpGet("{id}", Name = "GetShelter")]
         public IActionResult Get(int id)
         {
@@ -123,12 +136,12 @@ namespace AnimalShelters.API.Controllers
 
             if (_shelter != null)
             {
-                List<AnimalViewModel> _animalViewModel = new List<AnimalViewModel>();
+                List<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();
 
                 foreach (var animal in _shelter.Animals)
                 {
                     Animal _animalDb = _animalRepository.GetSingle(animal.Id);
-                    _animalViewModel.Add(Mapper.Map<Animal, AnimalViewModel>(_animalDb));
+                    _animalViewModel.Add(Mapper.Map<Animal, AnimalDetailsViewModel>(_animalDb));
                 }
 
                 return new OkObjectResult(_animalViewModel);
@@ -147,6 +160,15 @@ namespace AnimalShelters.API.Controllers
             IEnumerable<AnimalShelterSimpleViewModel> _simpleViewModel = Mapper.Map<IEnumerable<AnimalShelter>, IEnumerable<AnimalShelterSimpleViewModel>>(_animalShelters);
 
             return new OkObjectResult(_simpleViewModel);
+        }
+
+        [HttpGet("{id}/users")]
+        public IActionResult GetShelterUsers(int id)
+        {
+            IEnumerable<User> _users = _userRepository.FindBy(u => u.UserToAnimalShelter.AnimalShelterId == id);
+            IEnumerable<UserDetailsViewModel> usersViewModel = Mapper.Map<IEnumerable<User>, IEnumerable<UserDetailsViewModel>>(_users);
+
+            return new OkObjectResult(usersViewModel);
         }
 
         [HttpPost]
@@ -195,7 +217,7 @@ namespace AnimalShelters.API.Controllers
             _animalShelterRepository.Commit();
 
             shelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_shelterDb);
-            return new NoContentResult();
+            return new OkObjectResult(shelter);
         }
 
         [HttpPut("{id}/addAnimal")]
@@ -227,7 +249,7 @@ namespace AnimalShelters.API.Controllers
                 return NotFound();
             }
 
-            return new NoContentResult();
+            return new OkObjectResult(new { idAnimal = animalId });
         }
 
         [HttpDelete("{id}")]
@@ -242,18 +264,25 @@ namespace AnimalShelters.API.Controllers
             else
             {
                 IEnumerable<Animal> _animals = _animalRepository.FindBy(a => a.AnimalsToAnimalShelter.AnimalShelterId == id );
+                IEnumerable<User> _users = _userRepository.FindBy(u => u.UserToAnimalShelter.AnimalShelterId == id);
 
                 foreach (var animal in _animals)
                 {
                     _animalRepository.Delete(animal);
                 }
 
+                foreach (var user in _users)
+                {
+                    _userRepository.Delete(user);
+                }
+
                 _animalRepository.Commit();
+                _userRepository.Commit();
 
                 _animalShelterRepository.Delete(_shelter);
                 _animalShelterRepository.Commit();
 
-                return new NoContentResult();
+                return new OkObjectResult(new { idShelter = id });
             }
         }
 
@@ -276,7 +305,7 @@ namespace AnimalShelters.API.Controllers
                 _animalRepository.Delete(_animal);
                 _animalRepository.Commit();
 
-                return new NoContentResult();
+                return new OkObjectResult(new { idAnimal = idAnimal });
             }
         }
     }

@@ -162,9 +162,12 @@ namespace AnimalShelters.API.Controllers
                     Animal _animalDb = _animalRepository.GetSingle(animal.AnimalId);
                     _userViewModel.FavoriteAnimals.Add(Mapper.Map<Animal, AnimalViewModel>(_animalDb));
                 }
-            
-                AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(_user.UserToAnimalShelter.AnimalShelterId);
-                _userViewModel.UserToAnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
+
+                if (_user.UserToAnimalShelter != null)
+                {
+                    AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(_user.UserToAnimalShelter.AnimalShelterId);
+                    _userViewModel.UserToAnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
+                }
 
                 return new OkObjectResult(_userViewModel);
             }
@@ -267,7 +270,7 @@ namespace AnimalShelters.API.Controllers
                 return NotFound();
             }
 
-            return new NoContentResult();
+            return new OkObjectResult(new { idAnimal = animalId });
         }
 
         [HttpDelete("{id}")]
@@ -292,7 +295,7 @@ namespace AnimalShelters.API.Controllers
                 _favoriteAnimalRepository.Delete(_favoriteAnimal);
                 _favoriteAnimalRepository.Commit();
 
-                return new NoContentResult();
+                return new OkObjectResult(new { idAnimal = idAnimal });
             }
         }
 

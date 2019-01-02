@@ -14,6 +14,8 @@ namespace AnimalShelters.API.ViewModels.Mappings
             CreateMap<User, UserViewModel>()
                 .ForMember(vm => vm.FavoriteAnimals,
                 map => map.MapFrom(fa => fa.FavoriteAnimals.Select(a => a.AnimalId)))
+                .ForMember(vm => vm.Role,
+                map => map.MapFrom(u => ((RoleEnum)u.Role).ToString()))
                 .ForMember(vm => vm.UserToAnimalShelter,
                 map => map.MapFrom(utas => utas.UserToAnimalShelter.AnimalShelterId));
 

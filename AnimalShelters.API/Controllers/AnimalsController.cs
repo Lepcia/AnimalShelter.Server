@@ -112,9 +112,56 @@ namespace AnimalShelters.API.Controllers
 
         }
 
-        [HttpPost("user/{id}")]
-        public IActionResult GetByUserAndParams(int id, [FromBody]AnimalSearchViewModel search)
+        private DateTime GetDate(int value, AnimalAgeAccuracyEnum ageAccuracy)
         {
+            DateTime date = DateTime.Now;
+            switch (ageAccuracy)
+            {
+                case AnimalAgeAccuracyEnum.Weeks:
+                    date = date.AddDays(value * 7);
+                    break;
+                case AnimalAgeAccuracyEnum.Months:
+                    date = date.AddDays(31 * value);
+                    break;
+                case AnimalAgeAccuracyEnum.Years:
+                    date = date.AddYears(value);
+                    break;
+            }
+            return date;
+        }
+
+        [HttpPost("user/{id}")]
+        public IActionResult GetByUserAndParams(int id, [FromBody]AnimalSearchViewModel animalsSearch)
+        {
+            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals);
+            if (_user != null)
+            {
+                AnimalSexEnum sex = (AnimalSexEnum)Enum.Parse(typeof(AnimalSexEnum), animalsSearch.Sex);
+                AnimalSpeciesEnum species = (AnimalSpeciesEnum)Enum.Parse(typeof(AnimalSpeciesEnum), animalsSearch.Species);
+                AnimalAgeAccuracyEnum ageAccuracy = (AnimalAgeAccuracyEnum)Enum.Parse(typeof(AnimalAgeAccuracyEnum), animalsSearch.AgeAccuracy);
+                DateTime dateFrom = GetDate(-animalsSearch.AgeFrom, ageAccuracy);
+                DateTime dateTo = GetDate(-animalsSearch.AgeTo, ageAccuracy);
+
+                IEnumerable<Animal> _animals = _animalRepository.AllIncluding(a => a.AnimalsToAnimalShelter, a => a.AnimalsToAnimalShelter.AnimalShelter)
+                    .Where(a => a.Name.ToUpper().Contains(animalsSearch.Name.Length > 0 ? animalsSearch.Name.ToUpper() : a.Name.ToUpper()) &&
+                a.Breed.ToUpper().Contains(animalsSearch.Breed.Length > 0 ? animalsSearch.Breed.ToUpper() : a.Breed.ToUpper()) &&
+                a.Sex == sex && a.Species == species && a.DateOfBirth >= dateTo && a.DateOfBirth <= dateFrom &&
+                a.AnimalsToAnimalShelter.AnimalShelter.Name == animalsSearch.ShelterName).ToList();
+
+                IList<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();
+
+                foreach (var animal in _animals)
+                {
+
+                    AnimalShelter _animalShelterDb = _animalShelterRepository.GetSingle(s => s.Id == animal.AnimalsToAnimalShelter.AnimalShelterId);
+                    AnimalDetailsViewModel _animalDetailsViewModel = Mapper.Map<Animal, AnimalDetailsViewModel>(animal);
+                    if (_user.FavoriteAnimals.Select(x => x.AnimalId).ToList().Contains(animal.Id)) _animalDetailsViewModel.IsFavorite = true;
+                    _animalDetailsViewModel.AnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_animalShelterDb);
+                    _animalViewModel.Add(_animalDetailsViewModel);
+                }
+
+                return new OkObjectResult(_animalViewModel);
+            }
             return NotFound();
         }
 
@@ -241,7 +288,7 @@ namespace AnimalShelters.API.Controllers
 
             animal = Mapper.Map<Animal, AnimalViewModel>(_animalDb);
 
-            return new NoContentResult();
+            return new OkObjectResult(new { idAnimal = id });
         }
         
         [HttpDelete("{id}")]
@@ -265,7 +312,7 @@ namespace AnimalShelters.API.Controllers
                 _animalRepository.Delete(_animal);
                 _animalRepository.Commit();
 
-                return new NoContentResult();
+                return new OkObjectResult(new { idAnimal = id});
             }
         }
     }

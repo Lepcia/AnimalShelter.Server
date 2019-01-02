@@ -16,6 +16,7 @@ namespace AnimalShelters.Model.Entities
         public AnimalsToAnimalShelter AnimalsToAnimalShelter { get; set; }
         public AnimalAgeAccuracyEnum AgeAccuracy { get; set; }
 
+        public DateTime DateOfBirth { get; set; }
         private string ageString { get; set; }
         public string AgeString {
             get { return ageString; }
