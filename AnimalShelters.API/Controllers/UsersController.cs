@@ -149,7 +149,7 @@ namespace AnimalShelters.API.Controllers
                 return new OkObjectResult(new { favorites = favoriteIds });
             }
             return new OkObjectResult(new { favorites = favoriteIds });
-        }
+        }        
 
         [HttpPost]
         public IActionResult Create([FromBody]UserViewModel user)
@@ -160,6 +160,16 @@ namespace AnimalShelters.API.Controllers
             }
 
             User _newUser = Mapper.Map<UserViewModel, User>(user);
+
+            _newUser.Role = (RoleEnum)Enum.Parse(typeof(RoleEnum), user.Role);
+
+            AnimalShelter shelter = _animalShelterRepository.GetSingle(x => x.Name == user.ShelterName);
+
+            if (shelter != null)
+            {
+                _newUser.UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = shelter.Id, UserId = user.Id };
+            }
+
             _userRepository.Add(_newUser);
             _userRepository.Commit();
 
@@ -235,7 +245,7 @@ namespace AnimalShelters.API.Controllers
                 return NotFound();
             }
 
-            return new NoContentResult();
+            return new OkObjectResult(new { idAnimal = animalId });
         }
 
         [HttpDelete("{id}")]
@@ -261,7 +271,7 @@ namespace AnimalShelters.API.Controllers
                 _userRepository.Delete(_user);
                 _userRepository.Commit();
 
-                return new NoContentResult();
+                return new OkObjectResult(new { idUser = id });
             }
         }
 
@@ -280,7 +290,7 @@ namespace AnimalShelters.API.Controllers
                 _favoriteAnimalRepository.Delete(_favoriteAnimal);
                 _favoriteAnimalRepository.Commit();
 
-                return new NoContentResult();
+                return new OkObjectResult(new { idAnimal = idAnimal });
             }
         }
 

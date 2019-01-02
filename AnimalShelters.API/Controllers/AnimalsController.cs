@@ -288,7 +288,7 @@ namespace AnimalShelters.API.Controllers
 
             animal = Mapper.Map<Animal, AnimalViewModel>(_animalDb);
 
-            return new NoContentResult();
+            return new OkObjectResult(new { idAnimal = id });
         }
         
         [HttpDelete("{id}")]
