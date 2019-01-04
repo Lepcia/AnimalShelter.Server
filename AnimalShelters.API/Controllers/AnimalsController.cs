@@ -258,7 +258,7 @@ namespace AnimalShelters.API.Controllers
             return result;
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody]AnimalViewModel animal)
         {
             if (!ModelState.IsValid)
@@ -275,13 +275,13 @@ namespace AnimalShelters.API.Controllers
             else
             {
                 _animalDb.Name = animal.Name;
-                _animalDb.Age = animal.Age;
-                _animalDb.AgeAccuracy = (AnimalAgeAccuracyEnum)Enum.Parse(typeof(AnimalAgeAccuracyEnum), animal.AgeAccuracy);
+                _animalDb.DateOfBirth = animal.DateOfBirth;
                 _animalDb.Breed = animal.Breed;
                 _animalDb.Description = animal.Description;
                 _animalDb.Sex = (AnimalSexEnum)Enum.Parse(typeof(AnimalSexEnum), animal.Sex);
                 _animalDb.Size = (AnimalSizeEnum)Enum.Parse(typeof(AnimalSizeEnum), animal.Size);
                 _animalDb.Species = (AnimalSpeciesEnum)Enum.Parse(typeof(AnimalSpeciesEnum), animal.Species);
+                _animalDb.Avatar = animal.Avatar;
             }
 
             _animalRepository.Commit();

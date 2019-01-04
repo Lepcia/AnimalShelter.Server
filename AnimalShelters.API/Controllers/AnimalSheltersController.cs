@@ -136,15 +136,17 @@ namespace AnimalShelters.API.Controllers
 
             if (_shelter != null)
             {
-                List<AnimalDetailsViewModel> _animalViewModel = new List<AnimalDetailsViewModel>();
+                List<AnimalDetailsViewModel> _animalsViewModel = new List<AnimalDetailsViewModel>();
 
                 foreach (var animal in _shelter.Animals)
                 {
                     Animal _animalDb = _animalRepository.GetSingle(animal.Id);
-                    _animalViewModel.Add(Mapper.Map<Animal, AnimalDetailsViewModel>(_animalDb));
+                    AnimalDetailsViewModel _animalViewModel = Mapper.Map<Animal, AnimalDetailsViewModel>(_animalDb);
+                    _animalViewModel.AnimalShelter = Mapper.Map<AnimalShelter, AnimalShelterViewModel>(_shelter);
+                    _animalsViewModel.Add(_animalViewModel);
                 }
 
-                return new OkObjectResult(_animalViewModel);
+                return new OkObjectResult(_animalsViewModel);
             }
             else
             {
@@ -212,6 +214,7 @@ namespace AnimalShelters.API.Controllers
                 _shelterDb.PostalCode = shelter.PostalCode;
                 _shelterDb.Street = shelter.Street;
                 _shelterDb.Number = shelter.Number;
+                _shelterDb.Avatar = shelter.Avatar;
             }
 
             _animalShelterRepository.Commit();

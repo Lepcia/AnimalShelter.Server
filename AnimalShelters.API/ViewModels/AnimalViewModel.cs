@@ -23,6 +23,7 @@ namespace AnimalShelters.API.ViewModels
         public int[] Photos { get; set; }
         public DateTime InShelterFrom { get; set; }
         public int AnimalsToAnimalShelter { get; set; }
+        public string Avatar { get; set; }
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

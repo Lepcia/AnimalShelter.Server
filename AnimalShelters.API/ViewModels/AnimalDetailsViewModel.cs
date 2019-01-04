@@ -22,6 +22,7 @@ namespace AnimalShelters.API.ViewModels
         public DateTime InShelterFrom { get; set; }
         public AnimalShelterViewModel AnimalShelter { get; set; }
         public bool IsFavorite { get; set; }
+        public string Avatar { get; set; }
 
         public string[] AgesAccuracy { get; set; }
         public string[] Sexes { get; set; }
