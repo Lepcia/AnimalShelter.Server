@@ -160,7 +160,8 @@ namespace AnimalShelters.Data
                 Module module_04 = new Module { Id = 4, Symbol = "ANIMALS", Name = "Animals", Icon = "ic_pets_black_18dp", Order = 5 };
                 Module module_05 = new Module { Id = 5, Symbol = "SEARCH", Name = "Search", Icon = "baseline_search_black_18dp", Order = 3 };
                 Module module_06 = new Module { Id = 6, Symbol = "NEWS", Name = "News board", Icon = "ic_list_black_18dp", Order = 2 };
-                Module module_07 = new Module { Id = 7, Symbol = "SETTINGS", Name = "Settings", Icon = "baseline_settings_black_18dp", Order = 7 };
+                Module module_07 = new Module { Id = 7, Symbol = "SETTINGS", Name = "Settings", Icon = "baseline_settings_black_18dp", Order = 8 };
+                Module module_08 = new Module { Id = 8, Symbol = "PHOTOS", Name = "Photos", Icon = "baseline_local_see_black_18dp", Order = 7 };
 
                 context.Modules.Add(module_01);
                 context.Modules.Add(module_02);
@@ -169,6 +170,7 @@ namespace AnimalShelters.Data
                 context.Modules.Add(module_05);
                 context.Modules.Add(module_06);
                 context.Modules.Add(module_07);
+                context.Modules.Add(module_08);
 
                 context.SaveChanges();
             }
@@ -185,6 +187,7 @@ namespace AnimalShelters.Data
                 Rights right_09 = new Rights { Symbol = "ADD_SHELTER", Name = "Add shelter", IdModule = 3 };
                 Rights right_10 = new Rights { Symbol = "DEFAULT", Name = "News board", IdModule = 6 };
                 Rights right_11 = new Rights { Symbol = "DEFAULT", Name = "Settings", IdModule = 7 };
+                Rights right_12 = new Rights { Symbol = "DEFAULT", Name = "Photos", IdModule = 8 };
 
                 context.Rights.Add(right_01);
                 context.Rights.Add(right_02);
@@ -197,6 +200,7 @@ namespace AnimalShelters.Data
                 context.Rights.Add(right_09);
                 context.Rights.Add(right_10);
                 context.Rights.Add(right_11);
+                context.Rights.Add(right_12);
 
                 context.SaveChanges();
             }
@@ -229,6 +233,9 @@ namespace AnimalShelters.Data
                 RightsToUser rightToUser_25 = new RightsToUser { IdRight = 11, IdUser = 2 };
                 RightsToUser rightToUser_26 = new RightsToUser { IdRight = 11, IdUser = 3 };
                 RightsToUser rightToUser_27 = new RightsToUser { IdRight = 11, IdUser = 4 };
+                RightsToUser rightToUser_28 = new RightsToUser { IdRight = 12, IdUser = 1 };
+                RightsToUser rightToUser_29 = new RightsToUser { IdRight = 12, IdUser = 3};
+                RightsToUser rightToUser_30 = new RightsToUser { IdRight = 12, IdUser = 4 };
 
                 context.RightsToUsers.Add(rightToUser_01);
                 context.RightsToUsers.Add(rightToUser_02);
@@ -257,6 +264,9 @@ namespace AnimalShelters.Data
                 context.RightsToUsers.Add(rightToUser_25);
                 context.RightsToUsers.Add(rightToUser_26);
                 context.RightsToUsers.Add(rightToUser_27);
+                context.RightsToUsers.Add(rightToUser_28);
+                context.RightsToUsers.Add(rightToUser_29);
+                context.RightsToUsers.Add(rightToUser_30);
 
                 context.SaveChanges();
             }

@@ -68,6 +68,8 @@ namespace AnimalShelters.API.ViewModels.Mappings
             CreateMap<Photo, PhotoViewModel>();
 
             CreateMap<AnimalShelter, AnimalShelterSimpleViewModel>();
+
+            CreateMap<Animal, AnimalSimpleViewModel>();
          }
     }
 }

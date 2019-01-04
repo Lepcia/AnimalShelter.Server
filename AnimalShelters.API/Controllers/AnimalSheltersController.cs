@@ -164,6 +164,30 @@ namespace AnimalShelters.API.Controllers
             return new OkObjectResult(_simpleViewModel);
         }
 
+        [HttpGet("{id}/animals/simple")]
+        public IActionResult GetSheltersSimpleAnimals(int id)
+        {
+            AnimalShelter _shelter = _animalShelterRepository.GetSingle(s => s.Id == id, s => s.Animals);
+
+            if (_shelter != null)
+            {
+                List<AnimalSimpleViewModel> _animalsViewModel = new List<AnimalSimpleViewModel>();
+
+                foreach (var animal in _shelter.Animals)
+                {
+                    Animal _animalDb = _animalRepository.GetSingle(animal.Id);
+                    AnimalSimpleViewModel animalSimpleViewModel = Mapper.Map<Animal, AnimalSimpleViewModel>(_animalDb);
+                    _animalsViewModel.Add(animalSimpleViewModel);
+                }
+
+                return new OkObjectResult(_animalsViewModel);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
         [HttpGet("{id}/users")]
         public IActionResult GetShelterUsers(int id)
         {
