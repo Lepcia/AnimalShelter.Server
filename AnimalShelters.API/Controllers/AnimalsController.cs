@@ -139,8 +139,8 @@ namespace AnimalShelters.API.Controllers
                 AnimalSexEnum sex = (AnimalSexEnum)Enum.Parse(typeof(AnimalSexEnum), animalsSearch.Sex);
                 AnimalSpeciesEnum species = (AnimalSpeciesEnum)Enum.Parse(typeof(AnimalSpeciesEnum), animalsSearch.Species);
                 AnimalAgeAccuracyEnum ageAccuracy = (AnimalAgeAccuracyEnum)Enum.Parse(typeof(AnimalAgeAccuracyEnum), animalsSearch.AgeAccuracy);
-                DateTime dateFrom = GetDate(-animalsSearch.AgeFrom, ageAccuracy);
-                DateTime dateTo = GetDate(-animalsSearch.AgeTo, ageAccuracy);
+                DateTime dateFrom = animalsSearch.AgeFrom == -1 ? GetDate(30, AnimalAgeAccuracyEnum.Years) : GetDate(animalsSearch.AgeFrom, ageAccuracy);
+                DateTime dateTo = dateTo = animalsSearch.AgeTo == -1 ? GetDate(-30, AnimalAgeAccuracyEnum.Years) : GetDate(-animalsSearch.AgeTo, ageAccuracy);
 
                 IEnumerable<Animal> _animals = _animalRepository.AllIncluding(a => a.AnimalsToAnimalShelter, a => a.AnimalsToAnimalShelter.AnimalShelter)
                     .Where(a => a.Name.ToUpper().Contains(animalsSearch.Name.Length > 0 ? animalsSearch.Name.ToUpper() : a.Name.ToUpper()) &&
