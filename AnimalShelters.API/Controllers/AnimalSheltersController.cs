@@ -239,6 +239,7 @@ namespace AnimalShelters.API.Controllers
                 _shelterDb.Street = shelter.Street;
                 _shelterDb.Number = shelter.Number;
                 _shelterDb.Avatar = shelter.Avatar;
+                _shelterDb.BankAccountNumber = shelter.BankAccountNumber;
             }
 
             _animalShelterRepository.Commit();

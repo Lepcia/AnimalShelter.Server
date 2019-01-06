@@ -17,6 +17,7 @@ namespace AnimalShelters.API.ViewModels
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Avatar { get; set; }
+        public string BankAccountNumber { get; set; }
         public ICollection<AnimalViewModel> Animals { get; set; }
         public ICollection<UserViewModel> Users { get; set; }
     }
