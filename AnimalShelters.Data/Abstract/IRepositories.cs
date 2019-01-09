@@ -24,4 +24,8 @@ namespace AnimalShelters.Data.Abstract
     public interface IUserToAnimalShelterRepository : IEntityBaseRepository<UserToAnimalShelter> { }
 
     public interface IAnimalsToAnimalShelterRepository : IEntityBaseRepository<AnimalsToAnimalShelter> { }
+
+    public interface IRoleRepository : IEntityBaseRepository<Role> { }
+
+    public interface IRightsToRoleRepository : IEntityBaseRepository<RightsToRole> { }
 }

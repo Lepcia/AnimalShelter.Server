@@ -19,6 +19,8 @@ namespace AnimalShelters.Data
         public DbSet<RightsToUser> RightsToUsers { get; set; }
         public DbSet<UserToAnimalShelter> UserToAnimalShelters { get; set; }
         public DbSet<AnimalsToAnimalShelter> AnimalsToAnimalShelters { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RightsToRole> RightsToRoles { get; set; }
 
         public AnimalShelterContext(DbContextOptions options) : base(options) { }
 
@@ -130,7 +132,6 @@ namespace AnimalShelters.Data
                 .Property(r => r.IdUser)
                 .IsRequired();
 
-
             modelBuilder.Entity<RightsToUser>()
                 .HasOne(r => r.Right)
                 .WithMany(r => r.RightsToUser)
@@ -140,6 +141,24 @@ namespace AnimalShelters.Data
                 .HasOne(r => r.User)
                 .WithMany(u => u.RightsToUser)
                 .HasForeignKey(u => u.IdUser);
+
+            modelBuilder.Entity<RightsToRole>()
+                .Property(r => r.IdRight)
+                .IsRequired();
+
+            modelBuilder.Entity<RightsToRole>()
+                .Property(r => r.IdRole)
+                .IsRequired();
+
+            modelBuilder.Entity<RightsToRole>()
+                .HasOne(r => r.Right)
+                .WithMany(r => r.RightsToRole)
+                .HasForeignKey(r => r.IdRight);
+
+            modelBuilder.Entity<RightsToRole>()
+                .HasOne(r => r.Role)
+                .WithMany(r => r.RightsToRole)
+                .HasForeignKey(r => r.IdRole);
 
             modelBuilder.Entity<Rights>()
                 .HasOne(r => r.Module)
@@ -152,8 +171,14 @@ namespace AnimalShelters.Data
             modelBuilder.Entity<RightsToUser>()
                 .ToTable("RightsToUser");
 
+            modelBuilder.Entity<RightsToRole>()
+                .ToTable("RightsToRole");
+
             modelBuilder.Entity<Module>()
                 .ToTable("Module");
+
+            modelBuilder.Entity<Role>()
+                .ToTable("Role");
 
             modelBuilder.Entity<UserToAnimalShelter>()
                 .ToTable("UserToAnimalShelter");

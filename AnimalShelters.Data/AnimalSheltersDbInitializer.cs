@@ -82,8 +82,8 @@ namespace AnimalShelters.Data
                         new FavoriteAnimal { AnimalId = 1, UserId = 1},
 
                     },
-                    Role = RoleEnum.Admin
-                };
+                    Role = new Role { Id = 1, Name = "Admin", Symbol = "ADMIN" }
+            };
 
                 User user_01 = new User
                 {
@@ -95,8 +95,8 @@ namespace AnimalShelters.Data
                         new FavoriteAnimal { AnimalId = 1, UserId = 2 },
                         new FavoriteAnimal { AnimalId = 2, UserId = 2}
                     },
-                    Role = RoleEnum.CommonUser
-                };
+                    Role = new Role { Id = 2, Name = "ShelterAdmin", Symbol = "SHELTER_ADMIN" }
+            };
                 User user_02 = new User
                 {
                     FirstName = "Agata",
@@ -104,8 +104,8 @@ namespace AnimalShelters.Data
                     FavoriteAnimals = {
                         new FavoriteAnimal { AnimalId = 1, UserId = 3 }
                     },
-                    Role = RoleEnum.ShelterUser,
-                    UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 2, UserId = 3}
+                    Role = new Role { Id = 3, Name = "ShelterUser", Symbol = "SHELTER_USER" },
+                UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 2, UserId = 3}
                 };
                 User user_03 = new User
                 {
@@ -115,7 +115,7 @@ namespace AnimalShelters.Data
                     {
                         new FavoriteAnimal { AnimalId = 2, UserId = 4 }
                     },
-                    Role = RoleEnum.ShelterUser,
+                    Role = new Role { Id = 4, Name = "CommonUser", Symbol = "COMMON_USER" },
                     UserToAnimalShelter =  new UserToAnimalShelter {AnimalShelterId = 1, UserId = 4}
                 };
 
@@ -156,8 +156,6 @@ namespace AnimalShelters.Data
             {
                 Module module_01 = new Module { Id = 1, Symbol = "ADMIN", Name = "Administration", Icon = "ic_https_black_18dp", Order = 1 };
                 Module module_02 = new Module { Id = 2, Symbol = "FAVORITE", Name = "Favorite animals", Icon = "ic_favorite_black_18dp", Order = 4 };
-                Module module_03 = new Module { Id = 3, Symbol = "SHELTERS", Name = "Animal shelters", Icon = "ic_assignment_black_18dp", Order = 6 };
-                Module module_04 = new Module { Id = 4, Symbol = "ANIMALS", Name = "Animals", Icon = "ic_pets_black_18dp", Order = 5 };
                 Module module_05 = new Module { Id = 5, Symbol = "SEARCH", Name = "Search", Icon = "baseline_search_black_18dp", Order = 3 };
                 Module module_06 = new Module { Id = 6, Symbol = "NEWS", Name = "News board", Icon = "ic_list_black_18dp", Order = 2 };
                 Module module_07 = new Module { Id = 7, Symbol = "SETTINGS", Name = "Settings", Icon = "baseline_settings_black_18dp", Order = 8 };
@@ -165,8 +163,6 @@ namespace AnimalShelters.Data
 
                 context.Modules.Add(module_01);
                 context.Modules.Add(module_02);
-                context.Modules.Add(module_03);
-                context.Modules.Add(module_04);
                 context.Modules.Add(module_05);
                 context.Modules.Add(module_06);
                 context.Modules.Add(module_07);
@@ -176,18 +172,21 @@ namespace AnimalShelters.Data
             }
             if (!context.Rights.Any())
             {
-                Rights right_01 = new Rights { Symbol = "DEFAULT", Name = "Administration", IdModule = 1 };
-                Rights right_02 = new Rights { Symbol = "EDIT_USER", Name = "Edit user", IdModule = 1 };
-                Rights right_03 = new Rights { Symbol = "ADD_USER", Name = "Add user", IdModule = 1 };
-                Rights right_04 = new Rights { Symbol = "USER_LIST", Name = "User list view", IdModule = 1 };
-                Rights right_05 = new Rights { Symbol = "ADD_FAVORITE", Name = "Add favorite animal", IdModule = 2 };
-                Rights right_06 = new Rights { Symbol = "DELETE_FAVORITE", Name = "Delete favorite animal", IdModule = 2 };
-                Rights right_07 = new Rights { Symbol = "DEFAULT", Name = "Search", IdModule = 5 };
-                Rights right_08 = new Rights { Symbol = "ADD_ANIMAL", Name = "Add animal", IdModule = 4 };
-                Rights right_09 = new Rights { Symbol = "ADD_SHELTER", Name = "Add shelter", IdModule = 3 };
-                Rights right_10 = new Rights { Symbol = "DEFAULT", Name = "News board", IdModule = 6 };
-                Rights right_11 = new Rights { Symbol = "DEFAULT", Name = "Settings", IdModule = 7 };
-                Rights right_12 = new Rights { Symbol = "DEFAULT", Name = "Photos", IdModule = 8 };
+                Rights right_01 = new Rights { Id = 1, Symbol = "DEFAULT", Name = "Administration", IdModule = 1,  };
+                Rights right_02 = new Rights { Id = 2, Symbol = "EDIT_USER", Name = "Edit user", IdModule = 1 };
+                Rights right_03 = new Rights { Id = 3, Symbol = "ADD_USER", Name = "Add user", IdModule = 1 };
+                Rights right_04 = new Rights { Id = 4, Symbol = "USER_LIST", Name = "User list view", IdModule = 1 };
+                Rights right_05 = new Rights { Id = 5, Symbol = "ADD_FAVORITE", Name = "Add favorite animal", IdModule = 2 };
+                Rights right_06 = new Rights { Id = 6, Symbol = "DELETE_FAVORITE", Name = "Delete favorite animal", IdModule = 2 };
+                Rights right_07 = new Rights { Id = 7, Symbol = "DEFAULT", Name = "Search", IdModule = 5 };
+                Rights right_10 = new Rights { Id = 10, Symbol = "DEFAULT", Name = "News board", IdModule = 6 };
+                Rights right_11 = new Rights { Id = 11, Symbol = "DEFAULT", Name = "Settings", IdModule = 7 };
+                Rights right_12 = new Rights { Id = 12, Symbol = "DEFAULT", Name = "Photos", IdModule = 8 };
+                Rights right_13 = new Rights { Id = 13, Symbol = "DEFAULT", Name = "Favorite animals", IdModule = 2 };
+                Rights right_14 = new Rights { Id = 14, Symbol = "EDIT_USER", Name = "Edit user", IdModule = 7 };
+                Rights right_15 = new Rights { Id = 15, Symbol = "EDIT_SHELTER", Name = "Edit shelter", IdModule = 7 };
+                Rights right_16 = new Rights { Id = 16, Symbol = "EDIT_SHELTER_USERS", Name = "Edit shelter users", IdModule = 7 };
+                Rights right_17 = new Rights { Id = 17, Symbol = "EDIT_SHELTER_ANIMALS", Name = "Edit shelter animals", IdModule = 7 };
 
                 context.Rights.Add(right_01);
                 context.Rights.Add(right_02);
@@ -196,11 +195,23 @@ namespace AnimalShelters.Data
                 context.Rights.Add(right_05);
                 context.Rights.Add(right_06);
                 context.Rights.Add(right_07);
-                context.Rights.Add(right_08);
-                context.Rights.Add(right_09);
                 context.Rights.Add(right_10);
                 context.Rights.Add(right_11);
                 context.Rights.Add(right_12);
+
+                context.SaveChanges();
+            }
+            if (!context.Roles.Any())
+            {
+                Role admin = new Role { Id = 1, Name = "Admin", Symbol = "ADMIN" };
+                Role shelterAdmin = new Role { Id = 2, Name = "ShelterAdmin", Symbol = "SHELTER_ADMIN" };
+                Role shelterUser = new Role { Id = 3, Name = "ShelterUser", Symbol = "SHELTER_USER" };
+                Role commonUser = new Role { Id = 4, Name = "CommonUser", Symbol = "COMMON_USER" };
+
+                context.Roles.Add(admin);
+                context.Roles.Add(shelterAdmin);
+                context.Roles.Add(shelterUser);
+                context.Roles.Add(commonUser);
 
                 context.SaveChanges();
             }
@@ -267,6 +278,105 @@ namespace AnimalShelters.Data
                 context.RightsToUsers.Add(rightToUser_28);
                 context.RightsToUsers.Add(rightToUser_29);
                 context.RightsToUsers.Add(rightToUser_30);
+
+                context.SaveChanges();
+            }
+            if (!context.RightsToRoles.Any())
+            {
+                RightsToRole rightToAdmin_01 = new RightsToRole { IdRight = 1, IdRole = 1 };
+                RightsToRole rightToAdmin_02 = new RightsToRole { IdRight = 2, IdRole = 1 };
+                RightsToRole rightToAdmin_03 = new RightsToRole { IdRight = 3, IdRole = 1 };
+                RightsToRole rightToAdmin_04 = new RightsToRole { IdRight = 4, IdRole = 1 };
+                RightsToRole rightToAdmin_05 = new RightsToRole { IdRight = 5, IdRole = 1 };
+                RightsToRole rightToAdmin_06 = new RightsToRole { IdRight = 6, IdRole = 1 };
+                RightsToRole rightToAdmin_07 = new RightsToRole { IdRight = 7, IdRole = 1 };
+                RightsToRole rightToAdmin_08 = new RightsToRole { IdRight = 8, IdRole = 1 };
+                RightsToRole rightToAdmin_09 = new RightsToRole { IdRight = 9, IdRole = 1 };
+                RightsToRole rightToAdmin_10 = new RightsToRole { IdRight = 10, IdRole = 1 };
+                RightsToRole rightToAdmin_11 = new RightsToRole { IdRight = 12, IdRole = 1 };
+                RightsToRole rightToAdmin_12 = new RightsToRole { IdRight = 13, IdRole = 1 };
+
+                RightsToRole rightToShelterAdmin_01 = new RightsToRole { IdRight = 5, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_02 = new RightsToRole { IdRight = 6, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_03 = new RightsToRole { IdRight = 7, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_04 = new RightsToRole { IdRight = 8, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_05 = new RightsToRole { IdRight = 9, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_06 = new RightsToRole { IdRight = 10, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_07 = new RightsToRole { IdRight = 11, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_08 = new RightsToRole { IdRight = 12, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_09 = new RightsToRole { IdRight = 13, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_10 = new RightsToRole { IdRight = 14, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_11 = new RightsToRole { IdRight = 15, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_12 = new RightsToRole { IdRight = 16, IdRole = 2 };
+                RightsToRole rightToShelterAdmin_13 = new RightsToRole { IdRight = 17, IdRole = 2 };
+
+                RightsToRole rightToShelterUser_01 = new RightsToRole { IdRight = 5, IdRole = 3 };
+                RightsToRole rightToShelterUser_02 = new RightsToRole { IdRight = 6, IdRole = 3 };
+                RightsToRole rightToShelterUser_03 = new RightsToRole { IdRight = 7, IdRole = 3 };
+                RightsToRole rightToShelterUser_04 = new RightsToRole { IdRight = 8, IdRole = 3 };
+                RightsToRole rightToShelterUser_05 = new RightsToRole { IdRight = 9, IdRole = 3 };
+                RightsToRole rightToShelterUser_06 = new RightsToRole { IdRight = 10, IdRole = 3 };
+                RightsToRole rightToShelterUser_07 = new RightsToRole { IdRight = 11, IdRole = 3 };
+                RightsToRole rightToShelterUser_08 = new RightsToRole { IdRight = 12, IdRole = 3 };
+                RightsToRole rightToShelterUser_09 = new RightsToRole { IdRight = 13, IdRole = 3 };
+                RightsToRole rightToShelterUser_10 = new RightsToRole { IdRight = 14, IdRole = 3 };
+                RightsToRole rightToShelterUser_11 = new RightsToRole { IdRight = 17, IdRole = 3 };
+
+                RightsToRole rightToUser_01 = new RightsToRole { IdRight = 5, IdRole = 4 };
+                RightsToRole rightToUser_02 = new RightsToRole { IdRight = 6, IdRole = 4 };
+                RightsToRole rightToUser_03 = new RightsToRole { IdRight = 7, IdRole = 4 };
+                RightsToRole rightToUser_04 = new RightsToRole { IdRight = 8, IdRole = 4 };
+                RightsToRole rightToUser_05 = new RightsToRole { IdRight = 9, IdRole = 4 };
+                RightsToRole rightToUser_06 = new RightsToRole { IdRight = 10, IdRole = 4 };
+                RightsToRole rightToUser_07 = new RightsToRole { IdRight = 11, IdRole = 4 };
+                RightsToRole rightToUser_08 = new RightsToRole { IdRight = 13, IdRole = 4 };
+                RightsToRole rightToUser_09 = new RightsToRole { IdRight = 14, IdRole = 4 };
+
+                context.RightsToRoles.Add(rightToAdmin_01);
+                context.RightsToRoles.Add(rightToAdmin_02);
+                context.RightsToRoles.Add(rightToAdmin_03);
+                context.RightsToRoles.Add(rightToAdmin_04);
+                context.RightsToRoles.Add(rightToAdmin_05);
+                context.RightsToRoles.Add(rightToAdmin_06);
+                context.RightsToRoles.Add(rightToAdmin_07);
+                context.RightsToRoles.Add(rightToAdmin_08);
+                context.RightsToRoles.Add(rightToAdmin_09);
+                context.RightsToRoles.Add(rightToAdmin_10);
+                context.RightsToRoles.Add(rightToAdmin_11);
+                context.RightsToRoles.Add(rightToAdmin_12);
+                context.RightsToRoles.Add(rightToShelterAdmin_01);
+                context.RightsToRoles.Add(rightToShelterAdmin_02);
+                context.RightsToRoles.Add(rightToShelterAdmin_03);
+                context.RightsToRoles.Add(rightToShelterAdmin_04);
+                context.RightsToRoles.Add(rightToShelterAdmin_05);
+                context.RightsToRoles.Add(rightToShelterAdmin_06);
+                context.RightsToRoles.Add(rightToShelterAdmin_07);
+                context.RightsToRoles.Add(rightToShelterAdmin_08);
+                context.RightsToRoles.Add(rightToShelterAdmin_09);
+                context.RightsToRoles.Add(rightToShelterAdmin_10);
+                context.RightsToRoles.Add(rightToShelterAdmin_11);
+                context.RightsToRoles.Add(rightToShelterAdmin_12);
+                context.RightsToRoles.Add(rightToShelterAdmin_13);
+                context.RightsToRoles.Add(rightToShelterUser_01);
+                context.RightsToRoles.Add(rightToShelterUser_02);
+                context.RightsToRoles.Add(rightToShelterUser_03);
+                context.RightsToRoles.Add(rightToShelterUser_04);
+                context.RightsToRoles.Add(rightToShelterUser_05);
+                context.RightsToRoles.Add(rightToShelterUser_06);
+                context.RightsToRoles.Add(rightToShelterUser_07);
+                context.RightsToRoles.Add(rightToShelterUser_08);
+                context.RightsToRoles.Add(rightToShelterUser_09);
+                context.RightsToRoles.Add(rightToShelterUser_10);
+                context.RightsToRoles.Add(rightToShelterUser_11);
+                context.RightsToRoles.Add(rightToUser_01);
+                context.RightsToRoles.Add(rightToUser_02);
+                context.RightsToRoles.Add(rightToUser_03);
+                context.RightsToRoles.Add(rightToUser_04);
+                context.RightsToRoles.Add(rightToUser_05);
+                context.RightsToRoles.Add(rightToUser_06);
+                context.RightsToRoles.Add(rightToUser_07);
+                context.RightsToRoles.Add(rightToUser_08);
+                context.RightsToRoles.Add(rightToUser_09);
 
                 context.SaveChanges();
             }

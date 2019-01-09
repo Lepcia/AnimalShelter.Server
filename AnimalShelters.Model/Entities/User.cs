@@ -22,7 +22,7 @@ namespace AnimalShelters.Model.Entities
         public ICollection<FavoriteAnimal> FavoriteAnimals { get; set; }
         public int RightToUserId { get; set; }
         public UserToAnimalShelter UserToAnimalShelter { get; set; }
-        public RoleEnum Role { get; set; }
+        public Role Role { get; set; }
         
         [InverseProperty("User")]
         public List<RightsToUser> RightsToUser { get; set; }

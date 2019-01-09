@@ -19,5 +19,6 @@ namespace AnimalShelters.Model.Entities
         public int RightsToUserId { get; set; }
 
         public List<RightsToUser> RightsToUser { get; set; }
+        public List<RightsToRole> RightsToRole { get; set; }
     }
 }
