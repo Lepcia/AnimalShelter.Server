@@ -33,7 +33,7 @@ namespace AnimalShelters.API.Services
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
 
-            var user = _context.GetAll().SingleOrDefault(x => x.Email == email);
+            var user = _context.AllIncluding(x => x.Role, x=> x.UserToAnimalShelter).SingleOrDefault(x => x.Email == email);
 
             // check if user exists
             if (user == null)
@@ -85,7 +85,7 @@ namespace AnimalShelters.API.Services
 
         public User GetById(int id)
         {
-            return _context.GetSingle(id);
+            return _context.GetSingle(u => u.Id == id, u => u.Role);
         }
 
         public void Update(User userParam, string password = null)

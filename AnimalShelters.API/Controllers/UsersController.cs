@@ -28,6 +28,7 @@ namespace AnimalShelters.API.Controllers
         private IAnimalRepository _animalRepository;
         private IAnimalShelterRepository _animalShelterRepository;
         private IFavoriteAnimalRepository _favoriteAnimalRepository;
+        private IRoleRepository _roleRepository;
         private IUserService _userService;
         private readonly AppSettings _appSettings;
 
@@ -36,7 +37,7 @@ namespace AnimalShelters.API.Controllers
 
         public UsersController(IUserRepository userRepository, IAnimalRepository animalRepository,
             IFavoriteAnimalRepository favoriteAnimalRepository, IAnimalShelterRepository animalShelterRepository,
-            IUserService userService, IOptions<AppSettings> appSettings)
+            IUserService userService, IOptions<AppSettings> appSettings, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
             _animalRepository = animalRepository;
@@ -44,6 +45,7 @@ namespace AnimalShelters.API.Controllers
             _favoriteAnimalRepository = favoriteAnimalRepository;
             _userService = userService;
             _appSettings = appSettings.Value;
+            _roleRepository = roleRepository;
 
         }
 
@@ -77,7 +79,9 @@ namespace AnimalShelters.API.Controllers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Token = tokenString
+                Token = tokenString,
+                Role = user.Role,
+                ShelterId = user.UserToAnimalShelter != null ? user.UserToAnimalShelter.AnimalShelterId : 0
             });
         }
 
@@ -87,12 +91,17 @@ namespace AnimalShelters.API.Controllers
         {
             // map dto to entity
             var user = Mapper.Map<User>(userDto);
+            Role role = _roleRepository.GetSingle(r => r.Name == userDto.RoleName);
+            if (role != null)
+            {
+                user.Role = role;
+            }
 
             try
             {
                 // save 
                 _userService.Create(user, userDto.Password);
-                return Ok();
+                return new OkObjectResult(user);
             }
             catch (AppException ex)
             {
@@ -227,6 +236,12 @@ namespace AnimalShelters.API.Controllers
             // map dto to entity and set id
             var user = Mapper.Map<User>(userDto);
             user.Id = id;
+
+            Role role = _roleRepository.GetSingle(r => r.Name == userDto.RoleName);
+            if (role != null)
+            {
+                user.Role = role;
+            }
 
             try
             {
