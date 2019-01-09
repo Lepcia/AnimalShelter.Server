@@ -71,6 +71,8 @@ namespace AnimalShelters.Data
             }
             if (!context.Users.Any())
             {
+                byte[] passwordHash, passwordSalt;
+                CreatePasswordHash("Admin123", out passwordHash, out passwordSalt);
                 User admin = new User
                 {
                     FirstName = "Admin",
@@ -82,7 +84,9 @@ namespace AnimalShelters.Data
                         new FavoriteAnimal { AnimalId = 1, UserId = 1},
 
                     },
-                    Role = new Role { Id = 1, Name = "Admin", Symbol = "ADMIN" }
+                    Role = new Role { Id = 1, Name = "Admin", Symbol = "ADMIN" },
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt
             };
 
                 User user_01 = new User
@@ -95,8 +99,10 @@ namespace AnimalShelters.Data
                         new FavoriteAnimal { AnimalId = 1, UserId = 2 },
                         new FavoriteAnimal { AnimalId = 2, UserId = 2}
                     },
-                    Role = new Role { Id = 2, Name = "ShelterAdmin", Symbol = "SHELTER_ADMIN" }
-            };
+                    Role = new Role { Id = 2, Name = "ShelterAdmin", Symbol = "SHELTER_ADMIN" },
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt
+                };
                 User user_02 = new User
                 {
                     FirstName = "Agata",
@@ -105,7 +111,9 @@ namespace AnimalShelters.Data
                         new FavoriteAnimal { AnimalId = 1, UserId = 3 }
                     },
                     Role = new Role { Id = 3, Name = "ShelterUser", Symbol = "SHELTER_USER" },
-                UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 2, UserId = 3}
+                UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 2, UserId = 3},
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt
                 };
                 User user_03 = new User
                 {
@@ -116,7 +124,9 @@ namespace AnimalShelters.Data
                         new FavoriteAnimal { AnimalId = 2, UserId = 4 }
                     },
                     Role = new Role { Id = 4, Name = "CommonUser", Symbol = "COMMON_USER" },
-                    UserToAnimalShelter =  new UserToAnimalShelter {AnimalShelterId = 1, UserId = 4}
+                    UserToAnimalShelter =  new UserToAnimalShelter {AnimalShelterId = 1, UserId = 4},
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt
                 };
 
                 context.Users.Add(admin);
@@ -379,6 +389,18 @@ namespace AnimalShelters.Data
                 context.RightsToRoles.Add(rightToUser_09);
 
                 context.SaveChanges();
+            }
+        }
+
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
     }
