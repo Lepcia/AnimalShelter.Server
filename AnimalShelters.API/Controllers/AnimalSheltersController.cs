@@ -190,6 +190,18 @@ namespace AnimalShelters.API.Controllers
             }
         }
 
+        [HttpGet("animals/simple/all")]
+        public IActionResult GetSimpleAnimals()
+        {
+            IEnumerable<Animal> _animals = _animalRepository.GetAll();
+
+            IEnumerable<AnimalSimpleViewModel> _simpleAnimalViewModel = 
+                Mapper.Map<IEnumerable<Animal>, IEnumerable<AnimalSimpleViewModel>>(_animals);
+
+            return new OkObjectResult(_simpleAnimalViewModel);
+            
+        }
+
         [HttpGet("{id}/users")]
         public IActionResult GetShelterUsers(int id)
         {
