@@ -247,7 +247,7 @@ namespace AnimalShelters.API.Controllers
             {
                 // save 
                 _userService.Update(user, userDto.Password);
-                return Ok();
+                return new OkObjectResult( new { result = "OK"});
             }
             catch (AppException ex)
             {
@@ -292,7 +292,7 @@ namespace AnimalShelters.API.Controllers
         public IActionResult Delete(int id)
         {
             _userService.Delete(id);
-            return Ok();
+            return new OkObjectResult(new { result = "Ok" });
         }
 
         [HttpDelete("{idUser}/{idAnimal}")]

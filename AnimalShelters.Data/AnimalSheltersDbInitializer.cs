@@ -100,6 +100,7 @@ namespace AnimalShelters.Data
                         new FavoriteAnimal { AnimalId = 2, UserId = 2}
                     },
                     Role = new Role { Id = 2, Name = "ShelterAdmin", Symbol = "SHELTER_ADMIN" },
+                    UserToAnimalShelter = new UserToAnimalShelter { UserId = 2, AnimalShelterId = 2},
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt
                 };
@@ -124,7 +125,6 @@ namespace AnimalShelters.Data
                         new FavoriteAnimal { AnimalId = 2, UserId = 4 }
                     },
                     Role = new Role { Id = 4, Name = "CommonUser", Symbol = "COMMON_USER" },
-                    UserToAnimalShelter =  new UserToAnimalShelter {AnimalShelterId = 1, UserId = 4},
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt
                 };
