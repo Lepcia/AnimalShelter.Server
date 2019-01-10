@@ -3,6 +3,7 @@ using AnimalShelters.API.ViewModels;
 using AnimalShelters.Data.Abstract;
 using AnimalShelters.Model.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace AnimalShelters.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class AnimalsController : Controller
     {

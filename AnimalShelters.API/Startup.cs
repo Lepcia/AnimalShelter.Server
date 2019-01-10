@@ -69,6 +69,7 @@ namespace AnimalShelters.API
                         break;
                 }});
             var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Secret"]);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -134,11 +135,13 @@ namespace AnimalShelters.API
         {
             app.UseStaticFiles();
             // Add MVC to the request pipeline.
-            app.UseCors(builder =>
-                builder.AllowAnyOrigin()
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());
+
+            app.UseAuthentication();
 
             app.UseExceptionHandler(
               builder =>

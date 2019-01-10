@@ -6,11 +6,13 @@ using AnimalShelters.API.ViewModels;
 using AnimalShelters.Data.Abstract;
 using AnimalShelters.Model.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AnimalShelters.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class RightsToUserController : Controller
     {

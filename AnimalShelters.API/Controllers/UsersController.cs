@@ -110,7 +110,7 @@ namespace AnimalShelters.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();
@@ -160,7 +160,7 @@ namespace AnimalShelters.API.Controllers
         [HttpGet("{id}/details", Name = "GetUserDetails")]
         public IActionResult GetDetails(int id)
         {
-            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals, u => u.UserToAnimalShelter);
+            User _user = _userRepository.GetSingle(u => u.Id == id, u => u.FavoriteAnimals, u => u.UserToAnimalShelter, u => u.Role);
 
             if (_user != null)
             {

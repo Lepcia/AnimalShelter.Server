@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnimalShelters.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,6 @@ namespace AnimalShelters.API.ViewModels
         public string Avatar { get; set; }
         public ICollection<AnimalViewModel> FavoriteAnimals { get; set; }
         public AnimalShelterViewModel UserToAnimalShelter { get; set; }
-        public string Role { get; set; }
+        public Role Role { get; set; }
     }
 }
