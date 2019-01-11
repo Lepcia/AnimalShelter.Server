@@ -13,5 +13,8 @@ namespace AnimalShelters.API.UserDtoN
         public string Email { get; set; }
         public string Password { get; set; }
         public string RoleName { get; set; }
+        public string ShelterName { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string Avatar { get; set; }
     }
 }

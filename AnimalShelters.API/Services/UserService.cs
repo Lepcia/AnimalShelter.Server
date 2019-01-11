@@ -106,6 +106,10 @@ namespace AnimalShelters.API.Services
             user.FirstName = userParam.FirstName;
             user.LastName = userParam.LastName;
             user.Email = userParam.Email;
+            user.Avatar = userParam.Avatar;
+            user.DateOfBirth = userParam.DateOfBirth;
+            user.Role = userParam.Role;
+            user.UserToAnimalShelter = userParam.UserToAnimalShelter;
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))

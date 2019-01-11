@@ -230,32 +230,70 @@ namespace AnimalShelters.API.Controllers
             return new OkObjectResult(new { favorites = favoriteIds });
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]UserDto userDto)
+        [HttpPost]
+        public IActionResult Create([FromBody]UserViewModel user)
         {
-            // map dto to entity and set id
-            var user = Mapper.Map<User>(userDto);
-            user.Id = id;
-
-            Role role = _roleRepository.GetSingle(r => r.Name == userDto.RoleName);
+            User _newUser = Mapper.Map<UserViewModel, User>(user);
+            Role role = _roleRepository.GetSingle(r => r.Name == user.RoleName);
             if (role != null)
             {
-                user.Role = role;
+                _newUser.Role = role;
+            }
+            if (!String.IsNullOrEmpty(user.ShelterName))
+            {
+                AnimalShelter animalShelter = _animalShelterRepository.GetSingle(a => a.Name == user.ShelterName);
+                if (animalShelter != null)
+                {
+                    _newUser.UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = animalShelter.Id, UserId = user.Id };
+                }
+            }
+            try
+            {
+                // save 
+                _userService.Create(_newUser, user.Password);
+                return new OkObjectResult(user);
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            };
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody]UserViewModel user)
+        {
+            var _user = Mapper.Map<User>(user);
+            user.Id = id;
+
+            Role role = _roleRepository.GetSingle(r => r.Name == user.RoleName);
+            if (role != null)
+            {
+                _user.Role = role;
+            }
+            if (!String.IsNullOrEmpty(user.ShelterName))
+            {
+                AnimalShelter animalShelter = _animalShelterRepository.GetSingle(a => a.Name == user.ShelterName);
+                if (animalShelter != null)
+                {
+                    _user.UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = animalShelter.Id, UserId = user.Id };
+                }
             }
 
             try
             {
                 // save 
-                _userService.Update(user, userDto.Password);
-                return new OkObjectResult( new { result = "OK"});
+                _userService.Update(_user, user.Password);
+                return new OkObjectResult(user);
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
                 return BadRequest(new { message = ex.Message });
             }
+            
         }
-
+        
         [HttpPut("{id}/addFavoriteAnimal")]
         public IActionResult AddFavoriteAnimal(int id, int animalId)
         {

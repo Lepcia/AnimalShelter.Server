@@ -94,7 +94,7 @@ namespace AnimalShelters.Data
                     FirstName = "Daria",
                     LastName = "Lepa",
                     DateOfBirth = new DateTime(1994, 1, 29),
-                    Email = "daria.lepa@gmail.com",
+                    Email = "daria@email.com",
                     FavoriteAnimals = {
                         new FavoriteAnimal { AnimalId = 1, UserId = 2 },
                         new FavoriteAnimal { AnimalId = 2, UserId = 2}
@@ -108,11 +108,12 @@ namespace AnimalShelters.Data
                 {
                     FirstName = "Agata",
                     LastName = "Socha",
+                    Email = "agata@email.com",
                     FavoriteAnimals = {
                         new FavoriteAnimal { AnimalId = 1, UserId = 3 }
                     },
                     Role = new Role { Id = 3, Name = "ShelterUser", Symbol = "SHELTER_USER" },
-                UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 2, UserId = 3},
+                UserToAnimalShelter = new UserToAnimalShelter { AnimalShelterId = 1, UserId = 3},
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt
                 };
@@ -120,6 +121,7 @@ namespace AnimalShelters.Data
                 {
                     FirstName = "Damian",
                     LastName = "Keller",
+                    Email = "damian@email.com",
                     FavoriteAnimals =
                     {
                         new FavoriteAnimal { AnimalId = 2, UserId = 4 }
@@ -128,11 +130,25 @@ namespace AnimalShelters.Data
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt
                 };
+                User user_04 = new User
+                {
+                    FirstName = "User",
+                    LastName = "User",
+                    Email = "user@email.com",
+                    FavoriteAnimals =
+                    {
+                        new FavoriteAnimal { AnimalId = 3, UserId = 5 }
+                    },
+                    Role = new Role { Id = 4, Name = "ShelterUser", Symbol = "SHELTER_USER" },
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt
+                };
 
                 context.Users.Add(admin);
                 context.Users.Add(user_01);
                 context.Users.Add(user_02);
                 context.Users.Add(user_03);
+                context.Users.Add(user_04);
 
                 context.SaveChanges();
             }
